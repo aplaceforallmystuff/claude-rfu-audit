@@ -609,11 +609,348 @@ This file contains real-world examples of projects passing and failing each gate
 
 ## Gate 9: Occam's Razor
 
-### Pass Examples
-- TBD
+### FAIL Example 1: Framework When Function Would Do
 
-### Fail Examples
-- TBD
+**Project type:** Plugin system with config files, extension points, lifecycle hooks
+
+**Scenario:** A tool for formatting JSON files that includes:
+- Plugin architecture with extension points
+- YAML configuration file for formatting rules
+- Lifecycle hooks (pre-format, post-format, validation)
+- Custom DSL for defining formatters
+
+**Use case:** One internal team needs to format JSON consistently
+
+**Simplicity test checklist:**
+
+1. **Feature count test:**
+   - Features: Plugin system, config file, lifecycle hooks, DSL, core formatting
+   - Essential to core job (format JSON): Only core formatting = Yes
+   - Other features: 4 of 5 features (80%) are NOT essential → Over-engineering
+
+2. **Alternative existence test:**
+   - Can bash script solve 80%+? Yes: `jq '.' file.json > formatted.json`
+   - Why is your solution necessary? "Well, it's more flexible..." (not compelling)
+   - Result: Simple alternative exists, can't articulate why complexity needed → FAIL
+
+3. **Abstraction level test:**
+   - Layers: Config files (1), Plugins (2), Lifecycle hooks (3), DSL (4)
+   - Justified by use cases? No - only 1 internal team using it, no plugins created
+   - Result: 4 layers without justification → Over-engineered
+
+**Scoring:** All 3 tests fail → Clear FAIL
+
+**Why this FAILS:**
+- Abstraction test fails: 3 layers of abstraction with no justified use cases
+- Alternative test fails: Simple `jq` command does 90% of what users need
+- Feature count test fails: 80% of features unnecessary for core job
+- Classic over-engineering: building for imagined future rather than current need
+
+**Contrast with PASS:** Simple function that formats JSON, maybe with 1-2 options (indent size, sort keys) = PASS. Or if there were 5+ teams each needing custom formatters and actively creating plugins = justified complexity.
+
+---
+
+### FAIL Example 2: Bash Script Would Solve This
+
+**Project type:** 500-line Node.js CLI tool
+
+**Scenario:** A command-line tool that:
+- Recursively finds files matching a pattern
+- Renames them according to a template
+- Logs operations to a file
+- Has colored terminal output
+- Includes undo functionality via JSON state file
+
+**Core functionality:** Rename files matching a pattern
+
+**Simplicity test checklist:**
+
+1. **Feature count test:**
+   - Features: Find files, rename, logging, colors, undo
+   - Essential: Find and rename = Yes (2 features)
+   - Other features: Logging, colors, undo = nice-to-have (3 features, 60%)
+   - Result: >30% non-essential features → Borderline
+
+2. **Alternative existence test:**
+   - Can bash solve 80%+? Yes: `find . -name "*.txt" -exec mv {} {}.bak \;`
+   - Alternative handles core use case in one line
+   - Your articulation: "But mine has undo!" → Only needed because renaming is risky, which bash avoids with dry-run: `find . -name "*.txt" | while read f; do echo "Would rename: $f"; done`
+   - Result: Bash handles 80%+ including safe preview → FAIL
+
+3. **Abstraction level test:**
+   - Layers: CLI framework, file walker, rename engine, state manager, logger
+   - Justified? No - single script could do this
+   - Result: Multiple classes/modules where one script would suffice → Over-engineered
+
+**Scoring:** 2 of 3 tests fail → FAIL
+
+**Why this FAILS:**
+- Alternative test fails: `find` with `-exec` does 80%+ of this functionality
+- Abstraction test fails: Built class architecture where bash one-liner would work
+- The "undo" feature seems valuable but addresses risk that preview/dry-run solves more simply
+- 500 lines of code where 10-line bash script handles main use case
+
+**Contrast with PASS:** If the tool added significant value over bash (complex transformations, template variables, database of rename rules, scheduled renames, integration with file watcher) = PASS. Or if error handling and undo were critical for production use (renaming millions of files where mistake costs hours) = justified complexity.
+
+---
+
+## Gate 10: The Pareto Gate
+
+### FAIL Example 1: Can't Identify the ONE Feature
+
+**Project type:** "All-in-one productivity suite"
+
+**Scenario:** A productivity tool combining:
+1. Note-taking
+2. Task management
+3. Calendar
+4. Time tracking
+5. Habit tracking
+6. Goal setting
+7. Journal
+8. Pomodoro timer
+9. File storage
+10. Bookmarks
+11. Password manager
+12. Weather widget
+13. News reader
+14. Calculator
+15. Unit converter
+
+**Creator's claim:** "All features are equally important for productivity"
+
+**Value concentration analysis:**
+
+**Feature list with impact scores:**
+
+| Feature | Impact Score | Rationale |
+|---------|--------------|-----------|
+| Note-taking | 8 | Core knowledge capture |
+| Task management | 8 | Core workflow |
+| Time tracking | 7 | Useful for billing |
+| Calendar | 6 | Scheduling value |
+| Habit tracking | 5 | Marginal improvement |
+| Goal setting | 5 | Nice to have |
+| Journal | 4 | Personal preference |
+| Pomodoro timer | 4 | Technique-specific |
+| File storage | 3 | Dropbox already exists |
+| Bookmarks | 3 | Browser has this |
+| Password manager | 3 | 1Password exists |
+| Weather widget | 2 | Pure convenience |
+| News reader | 2 | Distraction |
+| Calculator | 1 | OS has this |
+| Unit converter | 1 | Google does this |
+
+**Total Impact:** 62
+
+**Cumulative analysis:**
+- Features 1-2 (note-taking, tasks): 16/62 = 26%
+- Features 1-4 (add time, calendar): 35/62 = 56%
+- Features 1-6 (add habits, goals): 45/62 = 73%
+- Features 1-8 (add journal, pomodoro): 54/62 = 87%
+
+**K = 8 features needed to reach 80%**
+**N = 15 total features**
+**Concentration ratio: K/N = 8/15 = 0.53**
+
+**Scoring:** K/N = 0.53 > 0.50 → FAIL (value spread too thin)
+
+**Binary test (alternative check):**
+- Q1: Can you name the ONE feature that delivers majority of value? NO - creator says "all equal"
+- Result: Can't identify core feature → FAIL
+
+**Why this FAILS:**
+- Concentration ratio 0.53 exceeds 0.50 threshold
+- Need 8 of 15 features (53%) to get 80% of value → value not concentrated
+- Can't answer "What's this tool for?" without listing multiple features
+- No core identity - is it a note app? Task manager? Productivity suite?
+- Binary test fails: No ONE feature you could point to
+- Features 9-15 provide only 13% of value but add 47% complexity
+
+**Contrast with PASS:** "It's a note-taking app. Task management and calendar sync are enhancements to help you act on your notes." → Clear core (notes), K/N would be 1/15 = 0.067 if notes scored 9-10 and others scored lower.
+
+---
+
+### FAIL Example 2: Feature Creep Without Usage Data
+
+**Project type:** File watcher that grew from simple to complex
+
+**Scenario:** Started as "watch directory and run command on change" but now includes:
+1. Watch files and directories (core)
+2. Run commands on change (core)
+3. Filter by file type
+4. Debounce rapid changes
+5. Email notifications
+6. Slack integration
+7. Discord webhooks
+8. Custom HTTP endpoints
+9. Database logging
+10. Scheduled tasks (even without file changes)
+11. File content search before triggering
+12. Git integration (auto-commit on change)
+
+**Value concentration analysis:**
+
+**Feature list with impact scores:**
+
+| Feature | Impact Score |
+|---------|--------------|
+| Watch files/directories | 9 |
+| Run command on change | 9 |
+| Filter by file type | 7 |
+| Debounce changes | 7 |
+| Email notifications | 5 |
+| Slack integration | 4 |
+| Discord webhooks | 3 |
+| HTTP endpoints | 3 |
+| Database logging | 3 |
+| Scheduled tasks | 5 |
+| Content search | 4 |
+| Git integration | 4 |
+
+**Total Impact:** 63
+
+**Cumulative:**
+- Features 1-2: 18/63 = 29%
+- Features 1-4: 39/63 = 62%
+- Features 1-6: 51/63 = 81%
+
+**K = 6, N = 12**
+**Concentration ratio: K/N = 6/12 = 0.50**
+
+**Scoring:** K/N = 0.50 → BORDERLINE → Apply binary test
+
+**Binary test:**
+- Q1: Can you name the ONE feature? Hard to say... watch + run are both core?
+- Q2: If watch was removed, would it still be useful? No (just a command runner)
+- Q3: Are other features enhancements to watching? Not really - notifications, git, search, scheduled tasks are separate concerns
+
+**Binary result:** Q1 unclear (is it TWO features masquerading as one?), Q3 = No → FAIL
+
+**Why this FAILS:**
+- Borderline concentration ratio (0.50) triggers deeper analysis
+- Binary test reveals confusion: Is core "file watching" or "automation platform"?
+- Features 7-12 (webhooks, DB logging, scheduled tasks, git) aren't enhancements to file watching - they're separate product ideas
+- No usage data showing anyone uses features 5-12
+- Classic feature creep: each feature seemed logical in isolation but diluted core value
+
+**Contrast with PASS:** If features 3-12 were removed and it was just "watch files, run command, with smart debouncing and type filters," K would be 4, N would be 4, K/N = 1.0 but... wait, that means you need ALL features for 80% value, which is also bad. Better: K=2 (watch + run), N=4, K/N = 0.50 borderline, but binary test would pass: "It watches files and runs commands. Filters and debounce make that core feature better." → PASS.
+
+---
+
+## Gate 11: Regret Minimization
+
+### FAIL Example 1: Resume-Driven Development
+
+**Project type:** GraphQL federation gateway with Kubernetes operator
+
+**Scenario:** A complex distributed system that:
+- Uses latest trendy tech (GraphQL, Kubernetes, service mesh)
+- Creator works at company that uses REST + monolith
+- Built during evenings/weekends over 3 weeks
+- No evidence of personal use
+- README doesn't mention learning, but commit messages reference tutorials
+
+**Self-audit signal check:**
+
+1. "I have been manually doing this task for 6+ months" → **NO** - Creator doesn't work with GraphQL or Kubernetes
+2. "I searched for existing solutions before building" → **NO** - Apollo Federation already exists
+3. "Existing solutions were inadequate (can list specific reasons)" → **NO** - Can't articulate why Apollo is inadequate
+4. "I will use this weekly after building" → **NO** - Doesn't use GraphQL at work
+5. "This problem costs me 2+ hours per week" → **NO** - Not experiencing this problem
+6. "I would rebuild this if repo was deleted" → **NO** (be honest)
+
+**Score: 0 of 6 signals = Yes**
+
+**Scoring:** 0 signals → FAIL (need 5 for pass)
+
+**Why this FAILS:**
+- Zero commitment signals present
+- No evidence of real problem being solved
+- Technology choices align with resume keywords, not actual needs
+- Built in 3-week burst (learning mode), not sustained problem-solving
+- Doesn't use the tool themselves
+- Can't articulate specific inadequacies of existing solutions (Apollo Federation)
+- Classic resume-driven development: building to add skills to LinkedIn
+
+**Contrast with PASS:** If creator worked at company migrating to microservices, spent 6 months manually configuring Apollo, identified 3 specific pain points, and this tool addressed those pains = 5-6 signals → PASS.
+
+---
+
+### FAIL Example 2: Learning Project Presented as Production Tool
+
+**Project type:** React dashboard framework
+
+**Scenario:** A framework for building dashboards with React, built while learning hooks and context.
+
+**Third-party audit signal check:**
+
+1. Commit history spans 3+ months? → **NO** - All commits in 2-week burst, 8 months ago
+2. Issues/PRs show active response? → **N/A** - Zero issues, zero PRs
+3. Documentation includes roadmap? → **NO** - README has install/usage only
+4. Problem publicly described before building? → **NO** - No blog post, tweet, or issue describing problem
+5. Multiple projects in this domain? → **NO** - Only React project in creator's profile
+
+**Score: 0 of 5 signals = Yes**
+
+**Automatic disqualifier check:**
+- README says "learning exercise"? → NO (doesn't say it)
+- Fork/clone? → NO (original work)
+- Creator doesn't use it? → YES - Commit messages: "following tutorial," "learning hooks," "practicing context"
+
+**Result: Disqualifier triggered → AUTOMATIC FAIL**
+
+**Why this FAILS:**
+- Zero third-party commitment signals
+- Commit messages reveal learning intent ("following tutorial," "practicing hooks")
+- Disqualifier: Evidence creator built for learning, not to solve problem
+- 2-week burst suggests tutorial pace, not problem-solving pace
+- No issues/PRs suggests no real users
+- No roadmap suggests no future commitment
+- Abandoned after learning was complete (8 months of no activity)
+
+**Contrast with PASS:** Same project but with 4+ months of commits, responded issues, roadmap in README, blog post before building describing dashboard pain points = 4-5 signals → PASS. Or if README explicitly said "Learning exercise - built while learning React hooks" = honest disclosure, wouldn't be evaluated as production tool.
+
+---
+
+### FAIL Example 3: High Initial Commitment, Now Abandoned
+
+**Project type:** iOS automation framework
+
+**Scenario:** A well-built framework with good docs, but:
+- Last commit: 8 months ago
+- 5 open issues, all from 6-7 months ago, zero responses
+- Roadmap in README with 6 items, all marked incomplete
+- Creator's other projects show similar pattern (burst, then abandon)
+
+**Third-party audit signal check:**
+
+1. Commit history spans 3+ months? → **YES** - 4 months of active development
+2. Issues/PRs show active response? → **NO** - 5 issues, median response time = infinite (no responses)
+3. Roadmap exists? → **YES** - Roadmap in README
+4. Problem described before building? → **YES** - Blog post describing iOS automation pain
+5. Multiple projects in domain? → **YES** - 3 iOS-related projects
+
+**Score: 4 of 5 signals = YES**
+
+**BUT:** All evidence is *historical*, not *current*
+- Commit history WAS active (past tense)
+- Roadmap EXISTS but is stale (no progress in 8 months)
+- Issues are IGNORED (creator has abandoned)
+
+**Why this FAILS:**
+- Commitment signals are backward-looking, but regret test is forward-looking
+- Evidence suggests regret already happened: Creator moved on
+- "Would you regret NOT shipping?" is moot when you shipped then abandoned
+- Pattern suggests initial enthusiasm without sustained commitment
+- Users are stuck with unmaintained tool (5 unanswered issues)
+- Third-party audit must consider *current* commitment, not just historical
+
+**Scoring nuance:** If counting only positive historical signals (4 of 5), this would borderline pass. But abandonment pattern reveals the true answer to regret test: Creator already regrets spending time on it (stopped maintaining).
+
+**Alternative interpretation:** This project PASSED regret test initially (creator shipped it), but FAILS it now (abandoned). For ongoing audits, current commitment matters more than historical.
+
+**Contrast with PASS:** Same project but with recent activity (commit 2 weeks ago), responded issues (median <7 days), and roadmap progress (2 of 6 items completed recently) = 4-5 signals with *current* commitment → PASS.
 
 ---
 
