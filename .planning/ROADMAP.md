@@ -13,7 +13,7 @@ This roadmap transforms the RFU Audit skill from a working-but-inconsistent fram
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Modular Architecture** - Separate concerns into focused files without changing behavior
-- [ ] **Phase 2: Gate Clarity** - Add rubrics, FAIL examples, and edge case handling for consistent scoring
+- [x] **Phase 2: Gate Clarity** - Add rubrics, FAIL examples, and edge case handling for consistent scoring
 - [ ] **Phase 3: Input Validation** - Handle bad paths and missing files gracefully
 - [ ] **Phase 4: Quick Audit Mode** - 5-gate triage for rapid project filtering
 - [ ] **Phase 5: Auto-Analyze Mode** - Pre-populate gate context from project files
@@ -51,10 +51,10 @@ Plans:
 **Plans:** 4 plans (4 waves - sequential due to shared file dependencies)
 
 Plans:
-- [ ] 02-01-PLAN.md — Add objective rubrics and FAIL examples for Gates 1-4
-- [ ] 02-02-PLAN.md — Add objective rubrics and FAIL examples for Gates 5-8 (esp. Gate 5 Wallet)
-- [ ] 02-03-PLAN.md — Add objective rubrics and FAIL examples for Gates 9-11 (esp. Gates 10, 11)
-- [ ] 02-04-PLAN.md — Create edge case resolution guide with decision trees
+- [x] 02-01-PLAN.md — Add objective rubrics and FAIL examples for Gates 1-4
+- [x] 02-02-PLAN.md — Add objective rubrics and FAIL examples for Gates 5-8 (esp. Gate 5 Wallet)
+- [x] 02-03-PLAN.md — Add objective rubrics and FAIL examples for Gates 9-11 (esp. Gates 10, 11)
+- [x] 02-04-PLAN.md — Create edge case resolution guide with decision trees
 
 ### Phase 3: Input Validation
 **Goal**: Clear error messages for bad input instead of cryptic failures
