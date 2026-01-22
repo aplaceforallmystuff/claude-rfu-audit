@@ -166,6 +166,7 @@ Refer to `config/gates-full.md` for complete specifications when evaluating each
 
 When auditing a project:
 
+0. **Validate input**: Run 6-stage validation (see Input Validation section)
 1. **Read project files**: README, package.json, main source files
 2. **Walk through each gate sequentially** (detailed in `config/gates-full.md`)
 3. **Score each gate**: Pass (1) or Fail (0)
