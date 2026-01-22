@@ -66,11 +66,11 @@ Plans:
   3. Permission denied produces actionable message
   4. Non-project directory produces guidance on what constitutes a project
   5. Validation guide documents all error handling patterns
-**Plans**: TBD
+**Plans:** 2 plans (1 wave - parallel execution)
 
 Plans:
-- [ ] 03-01: Add input validation to SKILL.md with error handling patterns
-- [ ] 03-02: Create INPUT-VALIDATION.md guide
+- [ ] 03-01-PLAN.md — Add input validation section to SKILL.md with 6-stage validation flow
+- [ ] 03-02-PLAN.md — Create INPUT-VALIDATION.md guide with complete error handling patterns
 
 ### Phase 4: Quick Audit Mode
 **Goal**: Filter projects in 5-10 minutes before committing to full audit
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 |-------|----------------|--------|-----------|
 | 1. Modular Architecture | 2/2 | Complete | 2026-01-22 |
 | 2. Gate Clarity | 4/4 | Complete | 2026-01-22 |
-| 3. Input Validation | 0/2 | Not started | - |
+| 3. Input Validation | 0/2 | Planned | - |
 | 4. Quick Audit Mode | 0/2 | Not started | - |
 | 5. Auto-Analyze Mode | 0/2 | Not started | - |
 | 6. Actionable Output | 0/3 | Not started | - |
