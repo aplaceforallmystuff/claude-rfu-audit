@@ -98,11 +98,11 @@ Plans:
   3. Extracted info is presented as suggestions, not scores
   4. Human must verify/override before gates are scored
   5. AUTO-ANALYZE.md documents heuristics and limitations
-**Plans**: TBD
+**Plans:** 2 plans (1 wave - parallel execution)
 
 Plans:
-- [ ] 05-01: Create AUTO-ANALYZE.md with extraction heuristics
-- [ ] 05-02: Add auto-analyze mode to SKILL.md
+- [ ] 05-01-PLAN.md — Create AUTO-ANALYZE.md guide with extraction heuristics and verification workflow
+- [ ] 05-02-PLAN.md — Add auto-analyze mode to SKILL.md with --auto-analyze flag
 
 ### Phase 6: Actionable Output
 **Goal**: Failed audits tell you exactly what to fix and how
@@ -162,7 +162,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 2. Gate Clarity | 4/4 | Complete | 2026-01-22 |
 | 3. Input Validation | 2/2 | Complete | 2026-01-22 |
 | 4. Quick Audit Mode | 2/2 | Complete | 2026-01-22 |
-| 5. Auto-Analyze Mode | 0/2 | Not started | - |
+| 5. Auto-Analyze Mode | 0/2 | Planned | - |
 | 6. Actionable Output | 0/3 | Not started | - |
 | 7. Audit History | 0/1 | Not started | - |
 
