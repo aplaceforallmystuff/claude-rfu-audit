@@ -25,6 +25,55 @@ Why does this exist?
 - Can't articulate user benefit
 - "Because it's cool" or "I wanted to learn"
 
+## Objective Rubric
+
+**Measurement Protocol:**
+
+1. Execute the 5 Whys chain by asking "Why does this exist?" and drilling down with each answer
+2. Count the number of iterations needed to reach a fundamental human need
+3. Evaluate the final answer against the bedrock needs list
+
+**Thresholds:**
+
+| Verdict | Criteria |
+|---------|----------|
+| **Pass** | Chain reaches fundamental human need (autonomy/time/money/status/connection/safety) within 5 iterations |
+| **Borderline** | Chain reaches 5 iterations without clear bedrock, but each why builds logically on the previous answer |
+| **Fail** | Chain stops at technical reason, loops back on itself, or cannot proceed past 3 iterations |
+| **Disqualifier** | Any why answered with "because I wanted to learn" or "because it's cool" without deeper exploration of how that learning/coolness serves others |
+
+**Bedrock Needs Reference:**
+- **Autonomy** - Control over one's time, decisions, or workflow
+- **Time** - Getting time back, faster results, reduced waiting
+- **Money** - Earning more, saving money, reducing costs
+- **Status** - Recognition, credibility, professional advancement
+- **Connection** - Relationships, communication, collaboration
+- **Safety** - Security, risk reduction, peace of mind
+
+## Scoring
+
+**PASS conditions:**
+- Final answer in chain is one of the six bedrock needs
+- Each why in the chain builds logically on the previous answer
+- Chain demonstrates clear path from technical implementation to human value
+
+**BORDERLINE conditions:**
+- Chain reaches 5 iterations with logical progression
+- Final answer is close to bedrock but not quite there (e.g., "efficiency" instead of "time")
+- Apply tie-breaker: Can you take one more step to reach true bedrock? If yes → FAIL, if no → PASS
+
+**FAIL conditions:**
+- Chain stops at technical implementation ("makes API calls easier")
+- Chain loops (why 4 repeats why 2)
+- Cannot articulate more than 3 iterations
+- Any iteration breaks logical causation
+
+## Edge Cases
+
+- **"Learning motivation"** - If why includes learning, must drill to: Why does that learning matter? Who benefits from your increased skill? See EDGE-CASES.md for full protocol.
+- **"Cool technology"** - Similar to learning; must drill to utility beyond personal interest
+- **Multiple paths** - If project serves multiple needs, auditor should trace the PRIMARY user path (most common use case)
+
 **Template Variables:**
 - `gate1_status` - Pass/Fail emoji (✅/❌)
 - `why1` - Answer to first why
@@ -55,6 +104,56 @@ Why does this exist?
 - No one would notice
 - Convenience-only value
 
+## Objective Rubric
+
+**Measurement Protocol:**
+
+1. Identify what users would use instead if this didn't exist
+2. Measure the switching cost (time to switch + data loss + recurring costs)
+3. If switching cost is low, apply quantitative test (time/cost savings vs alternative)
+
+**Switching Cost Thresholds:**
+
+| Alternative Exists | Switching Cost | Verdict |
+|-------------------|----------------|---------|
+| Yes | ≤5 minutes to switch + no data loss | **FAIL** (convenience only) |
+| Yes | 1-4 hours to switch + minimal data loss | **BORDERLINE** (apply quantitative test) |
+| Yes | >4 hours to switch OR significant data loss OR recurring cost avoided | **PASS** |
+| No | N/A - no alternative exists | **PASS** |
+
+**Quantitative Test (for BORDERLINE cases):**
+
+Calculate: `(Time saved per use × Use frequency) + (Cost saved)` vs `Switching cost`
+
+- If this project saves >20% time OR >20% cost compared to alternative → **PASS**
+- If savings <20% → **FAIL**
+
+**Examples:**
+- Alternative exists, takes 30 seconds to type equivalent command → FAIL (trivial switch cost)
+- Alternative exists, requires 2 hours to migrate config files → BORDERLINE → Apply test: Does this save >2.4 hours over reasonable usage period?
+- Alternative exists, but requires $10/month subscription → PASS (recurring cost avoided)
+
+## Scoring
+
+**PASS conditions:**
+- No alternative exists that delivers the same value
+- Alternative exists but switching cost is >4 hours
+- Alternative exists but requires data loss or migration pain
+- Alternative exists but has recurring costs this project eliminates
+- Borderline case where quantitative test shows >20% savings
+
+**FAIL conditions:**
+- Alternative exists with ≤5 minute switching cost
+- Only benefit is minor convenience ("saves me typing 2 flags")
+- Borderline case where quantitative test shows <20% savings
+- Users wouldn't notice if it disappeared
+
+## Edge Cases
+
+- **"Minor inconvenience" boundary** - Use the 5-minute rule: If switching takes ≤5 minutes total, it's minor. See EDGE-CASES.md for gray areas.
+- **Learning curves** - Don't count learning time for domain-standard tools (e.g., learning SQL doesn't count against SQL alternative)
+- **Emotional cost** - Only count if tied to measurable outcome (e.g., "frustration" doesn't count, but "context-switching breaks flow state, loses 15 min/day" does)
+
 **Template Variables:**
 - `gate2_status` - Pass/Fail emoji (✅/❌)
 - `inversion_notice` - Would anyone notice if it was gone?
@@ -83,6 +182,68 @@ Can a new user get meaningful value within 10 minutes of first contact?
 - Requires pre-requisites user doesn't have
 - Complex configuration before first value
 - Documentation gaps that force exploration
+
+## Objective Rubric
+
+**Measurement Protocol:**
+
+Simulate a new user's journey from zero to aha moment. Start timer at README open, stop when real value is demonstrated. Sum all phases:
+
+1. **Discovery** (0 if starting from README) - Time to find the project
+2. **Comprehension** - Time to understand what it does and what value it provides
+3. **Installation** - Time to install, including pre-requisites if project-specific
+4. **First Use** - Time to run first successful command/action
+5. **Aha Moment** - Time to see concrete value demonstrated (not just "it worked")
+
+**Time Thresholds:**
+
+| Total Time | Verdict |
+|------------|---------|
+| ≤10 minutes | **PASS** |
+| 10-15 minutes | **BORDERLINE** |
+| >15 minutes | **FAIL** |
+| Any time without aha moment | **FAIL** (time irrelevant if no value shown) |
+
+**Pre-requisite Timing Rules:**
+
+| Pre-requisite Type | Count Time? |
+|-------------------|-------------|
+| Domain-standard (Node for JS project, Python for Python project) | **NO** - Exclude from timing |
+| Common dev tools (git, curl, npm) if target is developers | **NO** - Assume present |
+| Project-specific (Redis, Docker, specific API keys) | **YES** - Include full setup time |
+| Uncommon (<30% of target users have it) | **YES** - Include installation time |
+
+**Aha Moment Definition:**
+Not just "it installed successfully" or "command ran." Must demonstrate tangible value:
+- CLI tool: Shows actual useful output, not just help text
+- API: Returns real data, not just 200 OK
+- Library: Demo/example produces visible result
+- Automation: Completes real task, not just logs "task started"
+
+## Scoring
+
+**PASS conditions:**
+- Total time ≤10 minutes
+- Aha moment reached (real value demonstrated)
+- Path is reproducible (not lucky guesswork)
+
+**BORDERLINE conditions:**
+- Total time 10-15 minutes with clear aha moment
+- Apply tie-breaker: Would a motivated user continue past 10 minutes to get this value? If yes → PASS, if no → FAIL
+
+**FAIL conditions:**
+- Total time >15 minutes
+- No aha moment reached at any time
+- Requires uncommon pre-requisites without guidance
+- Documentation gaps force trial-and-error
+- Setup succeeds but unclear what value was delivered
+
+## Edge Cases
+
+- **Pre-requisite timing** - If 30-50% of users have it, apply 50% weight to installation time. See EDGE-CASES.md for detailed decision tree.
+- **Multiple paths** - Test the "happy path" (recommended/documented approach), not theoretical minimums
+- **API keys** - If requires signup/approval, count actual wait time (can be hours/days) unless instant approval
+- **"Works on my machine"** - Must test from clean environment or VM, not from your configured dev setup
 
 **Template Variables:**
 - `gate3_status` - Pass/Fail emoji (✅/❌)
@@ -119,6 +280,54 @@ Explain the value in ONE sentence to a non-technical person.
 - Requires technical jargon
 - Describes implementation, not value
 - More than one sentence
+
+## Objective Rubric
+
+**Measurement Protocol:**
+
+Craft a single-sentence explanation of the project's value. Test against a 4-point binary checklist:
+
+**Checklist:**
+
+| Check | Pass Criteria | Jargon Reference |
+|-------|---------------|------------------|
+| 1. Zero jargon | Contains NO technical terms a non-technical person wouldn't know | See jargon list below |
+| 2. Value focus | Describes outcome/benefit, NOT implementation/features | Ask: "So what?" after reading |
+| 3. Single sentence | One sentence only (compound clauses with "and" are OK, but not multiple independent sentences with separate subjects) | Count periods |
+| 4. No questions | Listener understands immediately without needing clarification | Test: Would your grandmother need to ask "what's that?" |
+
+**Jargon List (Non-exhaustive):**
+
+❌ **Technical jargon:** API, CLI, SDK, schema, endpoint, deploy, distributed, caching, framework, library, repository, database, server, authentication, webhook, REST, GraphQL, microservice, containerized, orchestration
+
+✅ **Acceptable terms:** email, website, file, folder, app, program, internet, online, search, click, type, save, send, receive, password, account, settings
+
+**Scoring Formula:**
+- All 4 checks = YES → **PASS**
+- Any check = NO → **FAIL**
+
+## Scoring
+
+**PASS conditions:**
+- All 4 checklist items = YES
+- Sentence would make sense to bartender, grandmother, or Uber driver
+- No follow-up questions needed to understand the value
+
+**FAIL conditions:**
+- Any technical jargon present (even one term)
+- Describes HOW it works instead of WHAT value it provides
+- Uses multiple sentences (even if connected with semicolon or "and then")
+- Requires domain knowledge to understand
+
+**Tie-breaker test (if unsure):**
+Read the sentence to someone outside tech. If they say "okay, but what does that mean?" → FAIL
+
+## Edge Cases
+
+- **Domain-specific terms** - If target users are technical (developers, sysadmins), can use domain terms ONLY if unavoidable AND they know it (e.g., "git" to developers is OK). See EDGE-CASES.md for boundary cases.
+- **Compound sentences** - "It does X and Y" is one sentence. "It does X. It also does Y." is two sentences → FAIL
+- **Acronyms** - Treat all acronyms as jargon unless universally known (PDF, USB are OK; API, CLI are not)
+- **"Tech-adjacent" terms** - Terms like "app" or "website" are acceptable; terms like "web app" or "SaaS" are jargon
 
 **Template Variables:**
 - `gate4_status` - Pass/Fail emoji (✅/❌)
