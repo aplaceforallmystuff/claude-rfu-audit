@@ -32,11 +32,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. SKILL.md orchestrates flow and references external files
   4. Directory structure exists: `config/`, `guides/`, `templates/`, `reference/`
   5. Example structure placeholder exists in `guides/GATE-EXAMPLES.md`
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 01-01: Create directory structure and migrate gate definitions
-- [ ] 01-02: Update SKILL.md as orchestrator with file references
+- [ ] 01-01-PLAN.md — Create directory structure and migrate gate definitions to config/gates-full.md
+- [ ] 01-02-PLAN.md — Update SKILL.md as orchestrator with file references
 
 ### Phase 2: Gate Clarity
 **Goal**: Two auditors score the same project within 1 point of each other
@@ -158,7 +158,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Modular Architecture | 0/2 | Not started | - |
+| 1. Modular Architecture | 0/2 | Planned | - |
 | 2. Gate Clarity | 0/4 | Not started | - |
 | 3. Input Validation | 0/2 | Not started | - |
 | 4. Quick Audit Mode | 0/2 | Not started | - |
