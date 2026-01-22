@@ -48,13 +48,13 @@ Plans:
   3. Gates 5, 10, 11 have specific scoring rubrics (not subjective language)
   4. Edge case guide exists with resolution rules for borderline cases
   5. Auditor can determine pass/fail without subjective interpretation
-**Plans**: TBD
+**Plans:** 4 plans (4 waves - sequential due to shared file dependencies)
 
 Plans:
-- [ ] 02-01: Add rubrics and FAIL examples for Gates 1-4
-- [ ] 02-02: Add rubrics and FAIL examples for Gates 5-8 (esp. Gate 5 Wallet)
-- [ ] 02-03: Add rubrics and FAIL examples for Gates 9-11 (esp. Gates 10, 11)
-- [ ] 02-04: Create edge case resolution guide
+- [ ] 02-01-PLAN.md — Add objective rubrics and FAIL examples for Gates 1-4
+- [ ] 02-02-PLAN.md — Add objective rubrics and FAIL examples for Gates 5-8 (esp. Gate 5 Wallet)
+- [ ] 02-03-PLAN.md — Add objective rubrics and FAIL examples for Gates 9-11 (esp. Gates 10, 11)
+- [ ] 02-04-PLAN.md — Create edge case resolution guide with decision trees
 
 ### Phase 3: Input Validation
 **Goal**: Clear error messages for bad input instead of cryptic failures
@@ -159,7 +159,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Modular Architecture | 2/2 | Complete | 2026-01-22 |
-| 2. Gate Clarity | 0/4 | Not started | - |
+| 2. Gate Clarity | 0/4 | Planned | - |
 | 3. Input Validation | 0/2 | Not started | - |
 | 4. Quick Audit Mode | 0/2 | Not started | - |
 | 5. Auto-Analyze Mode | 0/2 | Not started | - |
