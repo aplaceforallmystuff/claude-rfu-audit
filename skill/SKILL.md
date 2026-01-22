@@ -17,11 +17,23 @@ Developers build what's interesting to *them*, not what's valuable to *users*. T
 ## Usage
 
 ```
-/rfu-audit [project-path]
+/rfu-audit [project-path] [--quick]
 /rfu-audit ~/Dev/my-project
+/rfu-audit ~/Dev/my-project --quick
 ```
 
 If no path provided, audits the current working directory.
+
+### Mode Selection
+
+| Flag | Mode | Gates | Config | Template |
+|------|------|-------|--------|----------|
+| (none) | Full | 11 gates | `config/gates-full.md` | `templates/audit-report.md` |
+| `--quick` | Quick | 5 gates | `config/gates-quick.md` | `templates/audit-report-quick.md` |
+
+**Quick mode** runs a 5-gate subset (Gates 1, 3, 4, 5, 9) for rapid triage in 5-10 minutes. Use it to filter projects before committing to a full audit.
+
+**Full mode** runs all 11 gates for comprehensive evaluation (45-90 minutes). Use it after quick mode passes or for final go/no-go decisions.
 
 ## Input Validation
 
