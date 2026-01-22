@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Modular Architecture** - Separate concerns into focused files without changing behavior
 - [x] **Phase 2: Gate Clarity** - Add rubrics, FAIL examples, and edge case handling for consistent scoring
-- [ ] **Phase 3: Input Validation** - Handle bad paths and missing files gracefully
+- [x] **Phase 3: Input Validation** - Handle bad paths and missing files gracefully
 - [ ] **Phase 4: Quick Audit Mode** - 5-gate triage for rapid project filtering
 - [ ] **Phase 5: Auto-Analyze Mode** - Pre-populate gate context from project files
 - [ ] **Phase 6: Actionable Output** - Priority matrix and fix integration
@@ -69,8 +69,8 @@ Plans:
 **Plans:** 2 plans (1 wave - parallel execution)
 
 Plans:
-- [ ] 03-01-PLAN.md — Add input validation section to SKILL.md with 6-stage validation flow
-- [ ] 03-02-PLAN.md — Create INPUT-VALIDATION.md guide with complete error handling patterns
+- [x] 03-01-PLAN.md — Add input validation section to SKILL.md with 6-stage validation flow
+- [x] 03-02-PLAN.md — Create INPUT-VALIDATION.md guide with complete error handling patterns
 
 ### Phase 4: Quick Audit Mode
 **Goal**: Filter projects in 5-10 minutes before committing to full audit
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 |-------|----------------|--------|-----------|
 | 1. Modular Architecture | 2/2 | Complete | 2026-01-22 |
 | 2. Gate Clarity | 4/4 | Complete | 2026-01-22 |
-| 3. Input Validation | 0/2 | Planned | - |
+| 3. Input Validation | 2/2 | Complete | 2026-01-22 |
 | 4. Quick Audit Mode | 0/2 | Not started | - |
 | 5. Auto-Analyze Mode | 0/2 | Not started | - |
 | 6. Actionable Output | 0/3 | Not started | - |
