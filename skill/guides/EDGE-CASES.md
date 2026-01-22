@@ -1,57 +1,489 @@
-# Edge Cases: Scoring Guidance
+# Edge Case Resolution Guide
 
-**Status:** Placeholder
+This document provides explicit rules for resolving borderline cases where pass/fail is unclear. Use when primary gate criteria produce ambiguous results.
 
-This file will contain guidance for handling edge cases and ambiguous scenarios during audits. Special focus on Gates 5, 10, and 11 which have the most subjective criteria.
+## How to Use This Document
+
+1. Apply the gate's primary criteria from `config/gates-full.md` first
+2. If verdict is clear (strong pass or clear fail), no need to reference this guide
+3. If verdict is borderline, find the relevant edge case below
+4. Apply the resolution rule exactly as written
+5. Document which edge case was used in the audit verdict
+
+---
+
+## Cross-Gate Edge Cases
+
+### N/A Determination
+
+**When:** A gate may not apply to certain project types.
+
+**Resolution rule:**
+- Gate is N/A ONLY if project explicitly declares out-of-scope in documentation
+- Implicit assumptions don't qualify ("it's obviously not for consumers" = still score the gate)
+- If >50% of gates are N/A, audit framework may not be appropriate for project type
+
+**Specific N/A criteria by gate:**
+- Gate 3 (10-Minute): N/A only for pure libraries with no executable/CLI component
+- Gate 5 (Wallet): N/A only if README states "research/educational artifact, not production tool"
+- Gate 7 (Friction): N/A only for libraries (no user-facing installation beyond npm/pip install)
+
+**If not explicitly declared out-of-scope:** Gate applies. Score it.
+
+### Inter-Gate Dependencies
+
+**When:** Failure in one gate affects ability to score another.
+
+**Resolution rule:**
+- Score all gates independently for diagnostic value
+- Add dependency note if earlier gate failure affects later gate validity
+- Example: Gate 4 fail (incomprehensible) may invalidate Gate 3 timing (couldn't understand what to do)
+
+**Format:** In verdict, note: "Score may be affected by Gate N failure - [reason]"
+
+---
+
+## Gate 1: The 5 Whys of Utility
+
+### Learning Motivation
+
+**When:** Creator's motivation is learning/skill-building.
+
+**Question:** Does learning goal disqualify the project?
+
+**Resolution rule:**
+- FAIL if: Learning is primary value AND no one else uses it
+- PASS if: Learning was motivation but project delivers utility to others
+- Tie-breaker: "If creator stopped using it, would others continue?"
+  - Yes = PASS (utility exists independently)
+  - No = FAIL (learning project, not utility)
+
+### Status/Connection as Bedrock
+
+**When:** 5 Whys chain reaches "recognition" or "community connection."
+
+**Question:** Valid bedrock need or resume-driven development?
+
+**Resolution rule:**
+- Check if status/connection is means or end:
+  - MEANS ("recognition helps me get hired to solve bigger problems") → Not bedrock, continue chain
+  - END ("helps users showcase work to employers") → Valid bedrock
+- Tie-breaker: Would established expert with no status needs find this valuable?
+  - Yes = PASS
+  - No = FAIL
+
+---
+
+## Gate 2: The Inversion Test
+
+### Minor Inconvenience Boundary
+
+**When:** Users would notice absence but have easy alternatives.
+
+**Question:** What switching cost is sufficient for PASS?
+
+**Resolution rule:**
+
+| Switching Cost | Verdict |
+|----------------|---------|
+| ≤5 min + no data loss | FAIL (convenience only) |
+| 1-4 hours setup/migration | BORDERLINE → Apply 20% test |
+| >4 hours OR data loss OR recurring cost | PASS |
+
+**20% test for BORDERLINE:** Does this save >20% time/cost vs alternative?
+- Yes = PASS
+- No = FAIL
+
+### "They Would Build It Themselves"
+
+**When:** Alternative is "users would just build their own version."
+
+**Question:** Does potential self-build count as switching cost?
+
+**Resolution rule:**
+- If build time >4 hours for average user = PASS (meaningful switching cost)
+- If build time ≤4 hours = FAIL (you've built a convenience, not a necessity)
+- Estimate build time for target user skill level, not expert
+
+---
+
+## Gate 3: The 10-Minute Test
+
+### Pre-requisite Timing
+
+**When:** Project requires setup (Docker, API keys) that auditor may or may not have.
+
+**Question:** Include pre-requisite time in 10-minute budget?
+
+**Resolution rule:**
+
+| Pre-requisite Type | Include Time? |
+|--------------------|---------------|
+| Project-specific (signup for this API) | Yes |
+| Uncommon (<30% of target users have it) | Yes |
+| Domain-standard (Node for JS, Python for Python) | No |
+| Common (≥70% of target users have it) | No |
+
+**Tie-breaker:** Check "Requirements" section. >3 items listed = Include time.
+
+### Aha Moment for Incremental Tools
+
+**When:** Project improves existing workflow without creating new capability.
+
+**Question:** What counts as "aha moment" for incremental improvement?
+
+**Resolution rule:**
+- Aha = "Clear demonstration this is better than current approach"
+- Must complete real task (not demo/example data)
+- Must produce measurable difference (time, errors, effort)
+- If no measurable difference within 10 min = FAIL
+
+**Example:** "Formatted 500 lines in 2 seconds vs 10 minutes manually" = Aha. "It installed successfully" = Not aha.
+
+---
+
+## Gate 4: The Bartender Test
+
+### Domain-Specific Terms
+
+**When:** Explanation uses terms that are jargon to general public but common in target domain.
+
+**Question:** Is "non-technical person" the general public or target audience?
+
+**Resolution rule:**
+- Bartender = Average person with no domain knowledge (literal bartender at a bar)
+- Domain terms allowed ONLY if:
+  - In common vernacular (95%+ of adults know it)
+  - OR immediately explained in same sentence
+- Safe words: email, file, website, app, password, account
+- Jargon: API, CLI, deploy, schema, repository, endpoint, webhook
+
+**Grandmother test:** Would your grandmother understand this with no context?
+- Yes = PASS
+- No = FAIL
+
+### Two-Sentence Explanations
+
+**When:** Technically two sentences but feels like one thought.
+
+**Question:** Strict one-sentence rule or spirit of the law?
+
+**Resolution rule:**
+- Count independent clauses:
+  - "It does X. It also does Y." → FAIL (two thoughts)
+  - "It does X, so you can Y." → PASS (one thought, consequence)
+  - "It does X. This means Y." → BORDERLINE
+
+**Comprehension test for BORDERLINE:** Can you understand value from first sentence alone?
+- Yes = PASS (second sentence is elaboration)
+- No = FAIL (requires both sentences = too complex)
 
 ---
 
 ## Gate 5: The Wallet Test
 
-### Edge Case: Open Source Projects
-- TBD: How to score when monetization isn't the goal?
+### Creator Wouldn't Pay (Built It)
 
-### Edge Case: Developer Tools vs. End-User Products
-- TBD: Different threshold for technical vs. non-technical users?
+**When:** Self-audit, creator says "I wouldn't pay because I already built it."
 
-### Edge Case: Network Effects
-- TBD: Value increases with users, but would individuals pay?
+**Question:** Revealed preference or expected response?
+
+**Resolution rule:**
+- Reframe: "If you hadn't built this, and someone else offered it for $20/month, would you pay?"
+- Clear Yes = Continue to naming 3 people test
+- Yes, but... = Apply counterfactual tests from rubric
+- No = FAIL (revealed preference: not worth $20/month of your time)
+
+### Types vs. Names
+
+**When:** Can identify user archetypes but not specific individuals.
+
+**Question:** Is "Sarah, a mid-career PM at Series B startup" specific enough?
+
+**Resolution rule:**
+- PASS requires: Person you could message today AND you've confirmed they have this problem
+- FAIL if:
+  - Hypothetical persona ("a PM at a startup")
+  - Real person but unvalidated ("Jane Doe who I assume has this problem")
+  - Celebrity/public figure you've never talked to
+
+**Test:** Could you send this person a message today asking if they have this problem?
+- Yes AND you have = PASS
+- Yes but you haven't confirmed = FAIL
+- No = FAIL
+
+### Open Source / No Monetization Goal
+
+**When:** Project explicitly not intended for paid use.
+
+**Question:** How to score Wallet Test when payment isn't the goal?
+
+**Resolution rule:**
+- Reframe from "would pay" to "market validation exists"
+- Use third-party signals even for self-audit:
+  - Stars/forks indicating interest
+  - Issues indicating real usage
+  - Similar paid tools existing (proves market)
+- If no market validation signals AND no monetization intent = FAIL
+- OSS can pass if market validation exists (people find it valuable enough to use/contribute)
 
 ---
 
-## Gate 10: The Pareto Gate
+## Gate 6: Job-to-be-Done
 
-### Edge Case: Platform Projects
-- TBD: When multiple features are required for platform coherence?
+### Multiple Related Jobs
 
-### Edge Case: MVP vs. Feature-Complete
-- TBD: Distinguishing between "not yet built" and "unnecessarily complex"?
+**When:** JTBD mentions several related tasks.
 
-### Edge Case: Regulatory Requirements
-- TBD: When features are required by compliance, not user value?
+**Question:** One job with sub-tasks or multiple jobs crammed together?
+
+**Resolution rule:**
+- One job if: Tasks are sequential steps in single workflow
+- Multiple jobs if: Tasks could happen independently without each other
+
+**Test:** Could a user hire this for job A without ever needing job B?
+- Yes = Multiple jobs, pick primary
+- No = One job with steps
+
+### Generic Situations
+
+**When:** Situation is vague ("when I need to be more productive").
+
+**Question:** How specific must the situation be?
+
+**Resolution rule:**
+- Must be observable: Could you watch someone enter this situation?
+- Good: "When reviewing my weekly task list on Monday morning..."
+- Bad: "When I need to be more productive..."
+
+**Specificity test:** Add "I am [situation] right now." Does it make sense?
+- "I am reviewing my weekly task list on Monday morning right now" = Yes = PASS
+- "I am needing to be more productive right now" = Awkward = FAIL
+
+---
+
+## Gate 7: Friction Audit
+
+### Pre-requisites Already Installed
+
+**When:** Auditor already has Docker/Node/etc installed.
+
+**Question:** Score based on auditor's experience or target user's?
+
+**Resolution rule:**
+- Score for target user, not auditor
+- If auditor has unusual setup, estimate what typical target user would experience
+- When in doubt, use "Requirements" section as guide
+
+### Different Friction for Different Users
+
+**When:** Power users vs. beginners have different experiences.
+
+**Question:** Which user's friction to score?
+
+**Resolution rule:**
+- Score for primary target user (who is the 80%?)
+- If project claims to serve both, score the harder path (beginners)
+- Document: "Scored for [user type] per project's stated audience"
+
+---
+
+## Gate 8: Second-Order Consequences
+
+### Necessary Lock-in
+
+**When:** Lock-in is inherent to solving the problem (e.g., data format standards).
+
+**Question:** Should necessary lock-in count as negative?
+
+**Resolution rule:**
+- DOES NOT count as negative if:
+  - Lock-in is industry standard (not proprietary)
+  - OR lock-in is less than current alternatives
+  - OR export/migration path exists
+- COUNTS as negative if:
+  - Proprietary format with no export
+  - OR worse lock-in than alternatives
+  - OR migration path is theoretical only
+
+### Maintenance as Feature
+
+**When:** Maintenance burden is actually value (e.g., security updates).
+
+**Question:** Should ongoing maintenance count as negative?
+
+**Resolution rule:**
+- DOES NOT count as negative if:
+  - Maintenance is automated (auto-updates)
+  - OR maintenance is the core value (security patches)
+- COUNTS as negative if:
+  - Manual intervention required regularly
+  - OR maintenance exceeds what user did before adoption
+
+---
+
+## Gate 9: Occam's Razor
+
+### Necessary Complexity
+
+**When:** Complexity is required for security, compliance, or correctness.
+
+**Question:** Does required complexity get a pass?
+
+**Resolution rule:**
+- Complexity is justified if:
+  - Regulatory requirement (document which regulation)
+  - OR security necessity (document the threat model)
+  - OR correctness requires it (prove simpler approach fails)
+- Complexity is NOT justified if:
+  - "Best practice" without specific rationale
+  - OR "enterprise-grade" when target is solo developers
+  - OR "future-proofing" for unvalidated use cases
+
+### Platform vs. Tool
+
+**When:** Project is a platform enabling others to build, not a tool solving one problem.
+
+**Question:** Different simplicity standard for platforms?
+
+**Resolution rule:**
+- Platforms get more complexity allowance IF:
+  - Extension points are actually used (not speculative)
+  - AND core platform still passes 10-minute test
+  - AND each abstraction layer has documented use case
+- Platform claim doesn't excuse complexity if:
+  - No one has built extensions yet
+  - OR "platform features" are unused internally
+
+---
+
+## Gate 10: Pareto Gate
+
+### Feature Count Ambiguity
+
+**When:** Unclear what counts as separate feature.
+
+**Question:** How granular should feature list be?
+
+**Resolution rule:**
+- Feature = distinct capability that could be toggled on/off independently
+- Same capability with parameters = 1 feature
+- Different algorithms/approaches = separate features
+
+**Test:** If you removed this, would other features break?
+- Yes = Sub-feature (don't count separately)
+- No = Separate feature (count it)
+
+### All Features Seem Essential
+
+**When:** Creator believes no features can be cut.
+
+**Question:** Pass (tightly coupled) or Fail (can't identify core)?
+
+**Resolution rule:**
+1. Apply forced ranking anyway (most valuable to least)
+2. Calculate concentration ratio with the ranking
+3. If K/N ≤ 0.30 even with "all essential" claim = PASS (value is concentrated even if creator doesn't realize)
+4. If K/N > 0.30 = FAIL (value genuinely spread thin)
+
+**Binary test tie-breaker:** "Which ONE feature would you keep if forced to delete all others?"
+- Clear answer = PASS
+- "Impossible to choose" = FAIL
+
+### Platform Coherence
+
+**When:** Multiple features required for platform to function.
+
+**Question:** Exception for platform-level feature sets?
+
+**Resolution rule:**
+- Apply same rubric, but:
+- If features are tightly coupled (removing one breaks platform) = Count as one "meta-feature"
+- Then ask: Does platform have one core meta-feature that drives 80% of value?
+- Same K/N threshold applies to meta-features
 
 ---
 
 ## Gate 11: Regret Minimization
 
-### Edge Case: Market Timing
-- TBD: When the idea is right but timing is wrong?
+### Long-Standing Problem, New Solution
 
-### Edge Case: Learning Projects
-- TBD: When building to learn vs. building to ship?
+**When:** Problem existed for years, but solution approach is new.
 
-### Edge Case: Passion vs. Pragmatism
-- TBD: When you love it but market doesn't care?
+**Question:** Does "6 months of manual work" require solution awareness?
+
+**Resolution rule:**
+- Problem duration counts, not solution awareness
+- 6+ months dealing with problem = Signal A passes
+- Discovering new solution approach is valid (innovation often comes from new perspectives)
+
+**Disqualifier check:** If solution is trendy AND problem is vague:
+- "Would you rebuild this in 6 months when trend fades?"
+- No = FAIL (tech hype, not problem validation)
+
+### High Commitment, Low Future Use
+
+**When:** 40 hours to build, will only use monthly.
+
+**Question:** Does weekly use requirement disqualify low-frequency high-impact tools?
+
+**Resolution rule:**
+- Adjust frequency by impact:
+
+| Impact per Use | Acceptable Frequency |
+|----------------|---------------------|
+| Saves 5+ hours | Monthly |
+| Saves 1-5 hours | Bi-weekly |
+| Saves <1 hour | Weekly required |
+
+**Quantitative test:** (Time saved per use) × (Uses per year) ≥ 20 hours?
+- Yes = PASS (ROI positive)
+- No = FAIL (doesn't justify build time)
+
+### Market Timing vs. Commitment
+
+**When:** Right idea at wrong time (market not ready).
+
+**Question:** Fail for timing or pass for valid commitment?
+
+**Resolution rule:**
+- Score commitment signals as documented (timing is separate concern)
+- If commitment signals pass but market timing is questionable:
+  - Note in verdict: "Passes commitment test; market timing risk flagged"
+- Timing doesn't change gate score, but should be noted
 
 ---
 
-## General Edge Cases
+## Decision Tree Summary
 
-### Multi-Purpose Tools
-- TBD: How to score when project serves multiple distinct use cases?
+When encountering any edge case:
 
-### Infrastructure vs. Applications
-- TBD: Different standards for libraries/frameworks vs. end-user apps?
+```
+1. Is there an automatic FAIL disqualifier?
+   → Yes → FAIL (stop here)
+   → No → Continue
 
-### Free Tier vs. Paid Tier
-- TBD: How to score when free tier is sufficient for most users?
+2. Apply primary gate criteria
+   → Clear PASS or FAIL → Done
+   → BORDERLINE → Continue
+
+3. Find relevant edge case in this guide
+   → Found → Apply resolution rule
+   → Not found → Document new edge case, use best judgment, add to guide
+
+4. Document which edge case was applied in verdict
+```
+
+---
+
+## Adding New Edge Cases
+
+When you encounter an unlisted edge case:
+
+1. **Document the ambiguity:** What made this unclear?
+2. **Record the signals:** What pointed toward PASS vs FAIL?
+3. **Define a resolution rule:** What test/threshold resolves it?
+4. **Add to this guide** under relevant gate
+5. **Note in audit:** "New edge case - see EDGE-CASES.md"
+
+This guide grows with audit experience.
