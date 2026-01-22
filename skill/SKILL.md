@@ -180,11 +180,16 @@ When auditing a project:
 
 0. **Validate input**: Run 6-stage validation (see Input Validation section)
 1. **Read project files**: README, package.json, main source files
-2. **Walk through each gate sequentially** (detailed in `config/gates-full.md`)
-3. **Score each gate**: Pass (1) or Fail (0)
-4. **Provide evidence** for each score
-5. **Generate prioritized fix recommendations**
-6. **Output structured report** using `templates/audit-report.md`
+2. **Select mode**: Based on `--quick` flag:
+   - Quick mode: Use `config/gates-quick.md` (5 gates)
+   - Full mode: Use `config/gates-full.md` (11 gates)
+3. **Walk through each gate sequentially** (per selected config)
+4. **Score each gate**: Pass (1) or Fail (0)
+5. **Provide evidence** for each score
+6. **Generate prioritized fix recommendations** (full mode) or triage recommendation (quick mode)
+7. **Output structured report** using corresponding template:
+   - Quick mode: `templates/audit-report-quick.md`
+   - Full mode: `templates/audit-report.md`
 
 For borderline cases, consult `guides/EDGE-CASES.md` (when available).
 
