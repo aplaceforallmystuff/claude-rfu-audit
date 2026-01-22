@@ -354,6 +354,53 @@ Two questions:
 - Can only name hypothetical user types
 - Wouldn't pay because you already have Claude/other tool
 
+## Objective Rubric
+
+**For self-audits (creator evaluating own project):**
+
+Signal A: "I have paid for similar tools in this category in the past" [Yes/No]
+Signal B: "I can name 3 specific people (real names, not archetypes) who have this exact problem" [Yes/No]
+Signal C: "I have validated the problem through 5+ conversations with potential users" [Yes/No]
+Signal D: "Comparable tools in this space charge $10-100/month" [Yes/No]
+
+**Scoring:**
+- Pass: 3+ signals = Yes
+- Borderline: 2 signals = Yes → Apply counterfactual: "If you had to cancel one $20/month subscription to afford this, which would you cancel?" If you can answer specifically → PASS. If you hesitate → FAIL.
+- Fail: 0-1 signals = Yes
+
+**For third-party audits (auditor evaluating others' project):**
+
+Signal A: GitHub stars >100 OR issues requesting features >10 [Yes/No]
+Signal B: Comparable paid tools exist in same category [Yes/No]
+Signal C: Project solves problem that costs time/money (not just convenience) [Yes/No]
+Signal D: 3+ users report using in production (in Issues/PRs/Discussions) [Yes/No]
+
+**Scoring:**
+- Pass: 3+ signals = Yes
+- Fail: 0-2 signals = Yes
+
+**"Real names" validation:**
+- PASS: Person you could message today who you've confirmed has this problem
+- FAIL: Hypothetical persona ("a PM at a startup"), celebrity you've never talked to, person you assume has problem but haven't validated
+
+## Scoring
+
+**PASS conditions:**
+- Self-audit: 3+ of 4 signals = Yes, or 2 signals with successful counterfactual test
+- Third-party audit: 3+ of 4 signals = Yes
+- Can name 3 specific people (real names) who you've confirmed have this problem
+
+**FAIL conditions:**
+- Self-audit: 0-1 signals = Yes, or 2 signals with failed counterfactual test
+- Third-party audit: 0-2 signals = Yes
+- Can only name archetypes, hypothetical personas, or people you haven't validated with
+
+## Edge Cases
+
+- "Creator wouldn't pay because they built it" - see EDGE-CASES.md
+- "Can name types but not names" - see EDGE-CASES.md
+- "Open source projects where monetization isn't the goal" - see EDGE-CASES.md
+
 **Template Variables:**
 - `gate5_status` - Pass/Fail emoji (✅/❌)
 - `wallet_self` - Would YOU pay $20/month? (Yes/No)
@@ -380,6 +427,32 @@ Two questions:
 - Vague situation ("when I need to do X")
 - Missing motivation or outcome
 - Multiple unrelated jobs
+
+## Objective Rubric
+
+Format check: "When [situation], I want to [motivation], so I can [outcome]"
+
+**Checklist (all must be Yes for PASS):**
+- [ ] Situation is specific (when/where/context, not just "when I need to")
+- [ ] Motivation is action-oriented (verb phrase, not state)
+- [ ] Outcome is tangible (measurable result or feeling)
+- [ ] Single job (not multiple unrelated jobs combined)
+
+**Specificity tests:**
+- Situation: Could you observe someone in this situation? (Yes = specific)
+- Motivation: Is the verb concrete? ("create" yes, "do" no, "manage" borderline)
+- Outcome: Could you verify this outcome occurred? (Yes = tangible)
+
+## Scoring
+
+- Pass: All 4 checklist items = Yes
+- Borderline: 3 of 4 = Yes → Which item failed? If situation vagueness, try adding context. If still can't specify → FAIL
+- Fail: ≤2 of 4 = Yes
+
+## Edge Cases
+
+- "Multiple related jobs" - see EDGE-CASES.md
+- "Generic situations" - see EDGE-CASES.md
 
 **Template Variables:**
 - `gate6_status` - Pass/Fail emoji (✅/❌)
@@ -412,6 +485,33 @@ Map every step between "I have a need" and "need is satisfied":
 - Discovery: Not findable (not published, bad SEO)
 - Installation: Complex dependencies or configuration
 - First Use: Multiple steps before any value
+
+## Objective Rubric
+
+Score each step on friction level:
+- Low (1): ≤2 minutes, no surprises
+- Medium (2): 2-10 minutes OR minor confusion
+- High (3): >10 minutes OR significant blocker
+
+| Step | Measure | Low | Medium | High |
+|------|---------|-----|--------|------|
+| Discovery | Time to find from search | ≤1 min | 1-5 min | >5 min or not findable |
+| Comprehension | Time to understand value | ≤1 min | 1-3 min | >3 min or still unclear |
+| Installation | Time to get running | ≤3 min | 3-10 min | >10 min |
+| First Use | Time to first value | ≤3 min | 3-10 min | >10 min |
+| Repeated Use | Steps to repeat | ≤3 steps | 4-7 steps | >7 steps or manual each time |
+| Mastery | Time to full proficiency | ≤30 min | 30-60 min | >60 min |
+
+**Scoring:**
+- Calculate friction score: Sum of all step scores (6-18 possible)
+- Pass: Total ≤9 (average Low-Medium)
+- Borderline: Total 10-12 → Check: Is highest friction step justified by value delivered? Yes = PASS, No = FAIL
+- Fail: Total ≥13 OR any single step = High(3) without corresponding high value
+
+## Edge Cases
+
+- "Pre-requisites already installed" - see EDGE-CASES.md
+- "Different friction for different user types" - see EDGE-CASES.md
 
 **Template Variables:**
 - `gate7_status` - Pass/Fail emoji (✅/❌)
@@ -452,6 +552,33 @@ Map every step between "I have a need" and "need is satisfied":
 - Creates lock-in worse than alternatives
 - Maintenance burden exceeds value
 - One-time use with no retention
+
+## Objective Rubric
+
+Score each consequence:
+- Positive: +1 per genuine positive second-order effect
+- Negative: -1 per genuine negative second-order effect
+
+**Positive indicators (each worth +1):**
+- Would tell others (viral): Evidence of shareability (simple to explain, wow factor)
+- Would build on it (ecosystem): API/plugin/extension points exist
+- Would return (retention): Ongoing value, not one-time use
+
+**Negative indicators (each worth -1):**
+- Lock-in: Data/workflow harder to move than before adoption
+- Maintenance burden: Requires ongoing attention beyond normal updates
+- New dependency: Creates reliance that didn't exist before
+
+**Scoring:**
+- Calculate net: (Positive count) - (Negative count)
+- Pass: Net ≥1 (more positive than negative)
+- Borderline: Net = 0 → Check: Are positives high-impact and negatives low-impact? Yes = PASS, No = FAIL
+- Fail: Net ≤-1 (more negative than positive)
+
+## Edge Cases
+
+- "Necessary lock-in" (e.g., data format standards) - see EDGE-CASES.md
+- "Maintenance as feature" (e.g., security updates) - see EDGE-CASES.md
 
 **Template Variables:**
 - `gate8_status` - Pass/Fail emoji (✅/❌)
