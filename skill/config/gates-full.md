@@ -613,6 +613,35 @@ Score each consequence:
 - You built a framework when a function would do
 - Features exist "just in case"
 
+## Objective Rubric
+
+**Simplicity test checklist:**
+
+1. **Feature count test:** Could you remove features and still solve the core problem?
+   - List all features
+   - For each: "Is this essential to the core job-to-be-done?" [Yes/No]
+   - If >30% of features are "No" → Potential over-engineering
+
+2. **Alternative existence test:** Does a simpler solution exist?
+   - Can a bash script/one-liner solve 80%+ of this? [Yes/No]
+   - Does an existing tool solve this with acceptable trade-offs? [Yes/No]
+   - If either = Yes AND you can't articulate why your solution is necessary → FAIL
+
+3. **Abstraction level test:** Are you building a framework when a function would do?
+   - Count layers of abstraction (config files, plugins, extension points)
+   - Is each layer justified by actual use cases? [Yes/No for each]
+   - If any layer lacks use case justification → Over-engineered
+
+**Scoring:**
+- Pass: All tests pass (essential features only, no simpler alternative, justified abstractions)
+- Borderline: 1 test fails → Is the complexity justified by scope or future needs? Document rationale.
+- Fail: 2+ tests fail OR "just in case" features exist
+
+## Edge Cases
+
+- "Necessary complexity" (security, compliance) - see EDGE-CASES.md
+- "Platform vs. tool" distinction - see EDGE-CASES.md
+
 **Template Variables:**
 - `gate9_status` - Pass/Fail emoji (✅/❌)
 - `occam_fewer` - Could fewer features work? (Yes/No)
@@ -641,6 +670,56 @@ Score each consequence:
 - "All features are equally important"
 - Feature creep without usage data
 
+## Objective Rubric
+
+**Value Concentration Calculation:**
+
+1. List all user-facing features (N = total features)
+   - Feature = distinct capability user can invoke independently
+   - Variations/parameters of same capability = 1 feature
+   - Example: "Search with filters" = 1 feature, not 5 features
+
+2. Score each feature on impact (1-10 scale):
+   - 10: Core functionality, project useless without it
+   - 7-9: Major value driver, significant user benefit
+   - 4-6: Meaningful enhancement, clear use case
+   - 1-3: Edge case, convenience, or "nice to have"
+
+3. Sort features by impact score (descending)
+
+4. Calculate cumulative impact percentage:
+   - Sum all impact scores = Total Impact
+   - For each feature (top to bottom): Cumulative% = (Sum so far / Total Impact) × 100
+
+5. Find K = number of features needed to reach 80% cumulative impact
+
+6. Calculate concentration ratio: K/N
+
+**Scoring:**
+- Pass: K/N ≤ 0.30 (top 30% of features deliver 80% of value)
+- Borderline: 0.30 < K/N ≤ 0.50 → Apply binary test below
+- Fail: K/N > 0.50 (value spread too thin)
+
+**Binary alternative (if scoring feels subjective):**
+- Can you name the ONE feature that delivers majority of value? [Yes/No]
+- If that feature was removed, would project still be useful? [Yes/No]
+- Are other features primarily enhancements to the core feature? [Yes/No]
+
+Pass: Q1=Yes AND (Q2=No OR Q3=Yes)
+Fail: Q1=No (can't identify core feature)
+
+## Documentation Required
+
+- Feature list with impact scores
+- Concentration ratio calculation
+- If borderline: rationale for binary test result
+
+## Edge Cases
+
+- "Feature count ambiguity" - see EDGE-CASES.md
+- "All features seem essential" - see EDGE-CASES.md
+- "Platform coherence" - see EDGE-CASES.md
+
 **Template Variables:**
 - `gate10_status` - Pass/Fail emoji (✅/❌)
 - `pareto_one_feature` - The ONE feature that matters most
@@ -666,6 +745,47 @@ Score each consequence:
 - Building to avoid FOMO
 - Scratching a temporary itch
 - Resume-driven development
+
+## Objective Rubric
+
+**For self-audits (creator evaluating own project):**
+
+Commitment signals (need 5 of 6 for PASS):
+1. "I have been manually doing this task for 6+ months" [Yes/No]
+2. "I searched for existing solutions before building" [Yes/No]
+3. "Existing solutions were inadequate (can list specific reasons)" [Yes/No]
+4. "I will use this weekly (or monthly if high-impact) after building" [Yes/No]
+5. "This problem costs me 2+ hours per week (or 5+ hours per month)" [Yes/No]
+6. "I would rebuild this if the repo was deleted" [Yes/No]
+
+**Scoring:**
+- Pass: 5+ signals = Yes
+- Borderline: 4 signals = Yes → Apply counterfactual: "Would you recommend a friend spend 40 hours building this?" If unhesitating yes → PASS. If hesitation → FAIL.
+- Fail: 0-3 signals = Yes
+
+**For third-party audits (auditor evaluating others' project):**
+
+Commitment signals (need 4 of 5 for PASS):
+1. Commit history spans 3+ months (not one-time build) [Yes/No]
+2. Issues and PRs show active response (median response time <7 days) [Yes/No]
+3. Documentation includes roadmap or future plans [Yes/No]
+4. Project solves problem creator publicly described before building [Yes/No]
+5. Creator has built multiple projects in this domain (not one-off) [Yes/No]
+
+**Scoring:**
+- Pass: 4+ signals = Yes
+- Fail: 0-3 signals = Yes
+
+**Automatic FAIL disqualifiers:**
+- README explicitly states "learning exercise" or "tutorial project"
+- Project is fork/clone of existing tool with no meaningful differentiation
+- Creator states in issues/docs they don't use the tool themselves
+
+## Edge Cases
+
+- "Long-standing problem, new solution approach" - see EDGE-CASES.md
+- "High initial commitment, low future use" - see EDGE-CASES.md
+- "Market timing vs. commitment" - see EDGE-CASES.md
 
 **Template Variables:**
 - `gate11_status` - Pass/Fail emoji (✅/❌)
