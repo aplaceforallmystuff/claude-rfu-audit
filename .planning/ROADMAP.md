@@ -82,11 +82,11 @@ Plans:
   3. Quick report shows 5-gate score with recommendation (proceed to full audit or not)
   4. Quick mode gates reference full gate definitions (no duplication)
   5. Quick mode template exists in `templates/audit-report-quick.md`
-**Plans**: TBD
+**Plans:** 2 plans (1 wave - parallel execution)
 
 Plans:
-- [ ] 04-01: Create gates-quick.md with 5-gate subset
-- [ ] 04-02: Add quick mode to SKILL.md and create quick template
+- [ ] 04-01-PLAN.md — Create gates-quick.md with 5-gate subset and triage algorithm
+- [ ] 04-02-PLAN.md — Add quick mode to SKILL.md and create quick report template
 
 ### Phase 5: Auto-Analyze Mode
 **Goal**: Reduce manual data entry by extracting project info automatically
@@ -161,7 +161,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 1. Modular Architecture | 2/2 | Complete | 2026-01-22 |
 | 2. Gate Clarity | 4/4 | Complete | 2026-01-22 |
 | 3. Input Validation | 2/2 | Complete | 2026-01-22 |
-| 4. Quick Audit Mode | 0/2 | Not started | - |
+| 4. Quick Audit Mode | 0/2 | Planned | - |
 | 5. Auto-Analyze Mode | 0/2 | Not started | - |
 | 6. Actionable Output | 0/3 | Not started | - |
 | 7. Audit History | 0/1 | Not started | - |
