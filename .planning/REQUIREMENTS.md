@@ -89,9 +89,9 @@ Requirements for enhancing the RFU Audit skill to produce consistent, actionable
 | INPUT-02 | Phase 3 | Complete |
 | INPUT-03 | Phase 3 | Complete |
 | ARCH-07 | Phase 3 | Complete |
-| MODE-01 | Phase 4 | Pending |
-| MODE-02 | Phase 4 | Pending |
-| ARCH-03 | Phase 4 | Pending |
+| MODE-01 | Phase 4 | Complete |
+| MODE-02 | Phase 4 | Complete |
+| ARCH-03 | Phase 4 | Complete |
 | MODE-03 | Phase 5 | Pending |
 | MODE-04 | Phase 5 | Pending |
 | ARCH-06 | Phase 5 | Pending |
@@ -103,4 +103,4 @@ Requirements for enhancing the RFU Audit skill to produce consistent, actionable
 | HIST-02 | Phase 7 | Pending |
 
 ---
-*Last updated: 2026-01-22 (Phase 3 complete)*
+*Last updated: 2026-01-22 (Phase 4 complete)*
