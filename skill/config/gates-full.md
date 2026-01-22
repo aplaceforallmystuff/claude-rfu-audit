@@ -346,7 +346,8 @@ Two questions:
 2. Can you name 3 specific people who would pay?
 
 **Pass criteria:**
-- Honest "yes" to both
+- Self-audit: 3+ of 4 validation signals present (or 2 signals + counterfactual test)
+- Third-party audit: 3+ of 4 market validation signals present
 - Real names, not archetypes like "developers" or "content creators"
 
 **Fail indicators:**
