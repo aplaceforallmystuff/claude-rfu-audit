@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 3 of 7 (Input Validation)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-01-22 - Completed 03-01-PLAN.md
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-01-22 - Completed 03-02-PLAN.md
 
-Progress: [███████             ] 50% (7/14 plans complete)
+Progress: [████████            ] 57% (8/14 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 6min
-- Total execution time: 0.87 hours
+- Total plans completed: 8
+- Average duration: 5min
+- Total execution time: 0.92 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [███████             ] 50% (7/14 plans complete)
 |-------|-------|-------|----------|
 | 01-modular-architecture | 2 | 4min | 2min |
 | 02-gate-clarity | 4 | 36min | 9min |
-| 03-input-validation | 1 | 1min | 1min |
+| 03-input-validation | 2 | 4min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (12min), 02-03 (9min), 02-04 (6min), 03-01 (1min)
-- Trend: Phase 3 started - fast documentation update (1min)
+- Last 5 plans: 02-03 (9min), 02-04 (6min), 03-01 (1min), 03-02 (3min)
+- Trend: Phase 3 complete - very fast documentation phase (2min avg)
 
 *Updated after each plan completion*
 
@@ -74,6 +74,10 @@ Recent decisions affecting current work:
 | 03-01 | 3-part error message format | Problem + why it matters + fix steps | Links validation failures to gate requirements |
 | 03-01 | Error types mapped to validation stages | 5 specific templates (path not exist, not directory, permission denied, no README, no project files) | Each error links to relevant gate (Gate 3, Gate 4) |
 | 03-01 | Validation as step 0 in Process | Added before reading project files | Ensures bad input caught before any audit work |
+| 03-02 | Symlinks should be followed | Users expect `/link/to/project` to work like `/actual/project` | Validation uses resolved path for all checks |
+| 03-02 | Only README.md recognized | Markdown is standard, variants add complexity without benefit | readme.md, README.txt, README.rst fail Stage 4 |
+| 03-02 | Empty README passes validation | Validation checks existence/readability, not content quality | Content evaluation happens at Gate 4 |
+| 03-02 | Project indicators check ~10 paths | Path existence checks are fast regardless of directory size | No special handling for large directories needed |
 
 ### Pending Todos
 
@@ -85,9 +89,9 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-22T16:09:03Z
-Stopped at: Completed 03-01-PLAN.md (Input Validation section) - Phase 3 in progress
+Last session: 2026-01-22T16:10:42Z
+Stopped at: Completed 03-02-PLAN.md (Input Validation Guide) - Phase 3 complete
 Resume file: None
 
 ---
-*Next step: Continue Phase 3 with 03-02 (Input Validation Guide implementation)*
+*Next step: Plan Phase 4 (Gate PASS Examples)*
