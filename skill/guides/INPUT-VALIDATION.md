@@ -1,0 +1,262 @@
+# Input Validation Guide
+
+Pre-audit validation ensures the RFU Audit skill receives valid input before attempting to evaluate gates. Validation catches common errors early and provides actionable guidance.
+
+## Validation Flow
+
+Validation runs 6 stages in order. Each stage depends on the previous passing. Stop at first failure.
+
+### Stage 1: Path Normalization
+
+**What:** Convert input path to absolute, normalized form.
+
+**Handles:**
+- Relative paths (`./project` -> `/full/path/to/project`)
+- Home directory shorthand (`~/project` -> `/Users/name/project`)
+- Trailing slashes (`/path/to/project/` -> `/path/to/project`)
+- Double slashes (`/path//to/project` -> `/path/to/project`)
+
+**Cannot fail:** Normalization always produces a path string (validity checked in Stage 2).
+
+### Stage 2: Path Existence
+
+**What:** Verify the normalized path exists on the filesystem.
+
+**Check:** Path resolves to an existing filesystem entry.
+
+**Failure:**
+- Error code: `ENOENT` (no such file or directory)
+- User symptom: "I provided a path but got an error"
+
+**Error message:**
+```
+X Cannot audit: Path does not exist
+  Path: {normalized_path}
+
+  Why this matters:
+    Cannot read project files without a valid path.
+
+  Fix this by:
+    Check the path and try again.
+    Common issues:
+    - Typo in directory name
+    - Directory was moved or deleted
+    - Path is on an unmounted drive
+```
+
+### Stage 3: Directory Check
+
+**What:** Verify the path is a directory, not a file.
+
+**Check:** Filesystem entry is a directory (follows symlinks).
+
+**Failure:**
+- Error code: `ENOTDIR` (conceptual - detected via stat)
+- User symptom: "I pointed to my README and got an error"
+
+**Error message:**
+```
+X Cannot audit: Path is a file, not a directory
+  Path: {normalized_path}
+
+  Why this matters:
+    Audit requires a project directory, not a single file.
+
+  Fix this by:
+    Provide the directory containing your project.
+    Try: /rfu-audit {parent_directory}
+```
+
+### Stage 4: README Check
+
+**What:** Verify README.md exists and is readable.
+
+**Check:** File `{path}/README.md` exists with read permission.
+
+**Failure modes:**
+- `ENOENT`: README.md does not exist
+- `EACCES`: README.md exists but not readable
+
+**Error message (missing):**
+```
+X Cannot audit: No README.md found
+  Path: {normalized_path}
+
+  Why this matters:
+    Gate 4 (Bartender Test) requires a clear value statement,
+    which should be in README.md.
+
+  Fix this by:
+    Create README.md with:
+    1. What this project does (one sentence)
+    2. Installation instructions
+    3. Basic usage example
+
+  Template:
+    # Project Name
+    One-sentence description of what this does.
+
+    ## Installation
+    npm install project-name
+
+    ## Usage
+    const project = require('project-name');
+    project.doThing();
+```
+
+**Error message (permission denied):**
+```
+X Cannot audit: Cannot read README.md
+  Path: {normalized_path}/README.md
+
+  Why this matters:
+    Gate 4 (Bartender Test) requires reading the value statement.
+
+  Fix this by:
+    Grant read access: chmod +r {normalized_path}/README.md
+```
+
+### Stage 5: Project Indicators
+
+**What:** Verify directory contains recognizable project files.
+
+**Check:** At least ONE of these exists:
+- Configuration files: `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, `Gemfile`, `pom.xml`, `build.gradle`
+- Source directories: `src/`, `lib/`, `app/`
+- Entry files: `index.js`, `main.py`, `main.go`, `main.rs`, `index.ts`
+
+**Failure:**
+- User symptom: "My directory exists but audit won't start"
+
+**Error message:**
+```
+X Cannot audit: No project files detected
+  Path: {normalized_path}
+
+  Why this matters:
+    Gate 3 (10-Minute Test) requires working code to evaluate.
+    An empty or non-project directory cannot be audited.
+
+  Fix this by:
+    Ensure directory contains source code and configuration.
+    Expected indicators (at least one):
+    - Config: package.json, Cargo.toml, pyproject.toml, go.mod
+    - Source: src/, lib/, app/
+    - Entry: index.js, main.py, main.go
+
+  If this IS a project:
+    The project may use non-standard structure.
+    Add a recognized config file (e.g., package.json for Node.js).
+```
+
+### Stage 6: Proceed to Audit
+
+**What:** All validation passed. Begin gate evaluation.
+
+**Action:** Continue to "## Process" step 1 (Read project files).
+
+---
+
+## Error Reference
+
+Quick lookup for all validation errors:
+
+| Error | Stage | Cause | Key Fix |
+|-------|-------|-------|---------|
+| Path does not exist | 2 | ENOENT | Check path spelling |
+| Permission denied (directory) | 2 | EACCES | chmod +r on directory |
+| Not a directory | 3 | File provided | Use parent directory |
+| No README.md | 4 | Missing file | Create README.md |
+| Cannot read README | 4 | EACCES | chmod +r on README |
+| No project files | 5 | Empty/wrong dir | Add config or source |
+
+---
+
+## Edge Cases
+
+### Symlinks
+
+**Behavior:** Follow symlinks (use resolved path for all checks).
+
+**Rationale:** Users expect `/link/to/project` to work like `/actual/project`. Breaking symlinks would surprise users.
+
+**Example:**
+```
+/home/user/my-project -> /srv/projects/actual-project
+/rfu-audit /home/user/my-project  # Works, audits /srv/projects/actual-project
+```
+
+### Empty README.md
+
+**Behavior:** Pass validation, fail at Gate 4.
+
+**Rationale:** Validation checks existence and readability, not content quality. Content evaluation is Gate 4's job.
+
+**Example:**
+```
+/project/README.md exists but is 0 bytes
+- Validation: PASS (file exists and is readable)
+- Gate 4: FAIL (no value statement present)
+```
+
+### README Variants (readme.md, README.txt, README.rst)
+
+**Behavior:** Only `README.md` is recognized. Variants fail Stage 4.
+
+**Rationale:** Markdown is the standard. Supporting variants adds complexity without clear benefit.
+
+**Guidance in error:** If user has `readme.md`, suggest renaming to `README.md`.
+
+### Case Sensitivity
+
+**Behavior:** Case-sensitive on Linux/macOS HFS+ case-sensitive. Case-insensitive on macOS HFS+ (default) and Windows.
+
+**Practical impact:** `README.md` and `readme.md` may or may not be the same file depending on filesystem.
+
+**Recommendation:** Always use `README.md` (capital) for consistency.
+
+### Hidden Directories
+
+**Behavior:** Audit hidden directories (`.project/`) normally.
+
+**Rationale:** Some valid projects use hidden directories (e.g., `.github` actions). No special handling needed.
+
+### Network Paths / Mounted Drives
+
+**Behavior:** Treat as local paths. May fail if network is unavailable.
+
+**Error handling:** ENOENT or ETIMEDOUT errors get standard "Path does not exist" message.
+
+### Very Large Directories
+
+**Behavior:** No special handling. Stage 5 checks existence of indicators, not directory size.
+
+**Performance:** Checking ~10 specific paths is fast regardless of directory size.
+
+---
+
+## Implementation Notes
+
+For Claude Code skill execution:
+
+1. **Path normalization:** Use standard path resolution. Handle `~` expansion.
+
+2. **Existence check:** Attempt to access path. Catch errors by type:
+   - `ENOENT` = does not exist
+   - `EACCES` = permission denied
+
+3. **Directory check:** Check if path is directory (not file). Symlinks resolve before check.
+
+4. **README check:** Look for `README.md` specifically (case as written).
+
+5. **Project indicators:** Check each indicator in order, stop at first found. If none found, fail with full list in error message.
+
+6. **Error output:** Use the exact message templates. Include the specific path that failed.
+
+---
+
+## Related
+
+- `SKILL.md` - Main skill definition with validation summary
+- `EDGE-CASES.md` - Gate-specific edge cases (post-validation)
+- `config/gates-full.md` - Full gate definitions referenced in error messages
