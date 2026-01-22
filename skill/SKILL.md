@@ -23,6 +23,110 @@ Developers build what's interesting to *them*, not what's valuable to *users*. T
 
 If no path provided, audits the current working directory.
 
+## Input Validation
+
+Before starting the audit, run a 6-stage validation flow to catch bad input early and provide actionable error messages.
+
+### Validation Flow
+
+Execute in order. Stop at first failure.
+
+1. **Normalize path**: Handle `~/`, relative paths, trailing slashes
+2. **Check path exists**: Directory or file must exist at the given path
+3. **Check path is a directory**: Not a single file
+4. **Check README.md exists**: Must be present and readable in the directory
+5. **Check for project indicators**: At least one of:
+   - Configuration: `package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`
+   - Source directories: `src/`, `lib/`
+   - Entry files: `index.js`, `main.py`
+6. **Proceed to audit**
+
+### Error Message Format
+
+All validation errors follow a three-part structure:
+
+```
+X Cannot audit: {Problem}
+
+  Why this matters:
+    {Link to specific gate requirement}
+
+  Fix this by:
+    {Actionable steps}
+```
+
+### Error Types
+
+**Path does not exist:**
+```
+X Cannot audit: Path does not exist
+  Path: /bad/path
+
+  Why this matters:
+    Cannot read project files without a valid path.
+
+  Fix this by:
+    Check the path and try again.
+```
+
+**Not a directory:**
+```
+X Cannot audit: Path is a file, not a directory
+  Path: /path/to/README.md
+
+  Why this matters:
+    Audit requires a project directory, not a single file.
+
+  Fix this by:
+    Provide the directory containing your project.
+    Try: /rfu-audit /path/to
+```
+
+**Permission denied:**
+```
+X Cannot audit: Permission denied
+  Path: /restricted/path
+
+  Why this matters:
+    Cannot read project files without read access.
+
+  Fix this by:
+    Grant read access: chmod +r /restricted/path
+    Or run from a directory you have access to.
+```
+
+**Missing README:**
+```
+X Cannot audit: No README.md found
+  Path: /path/to/project
+
+  Why this matters:
+    Gate 4 (Bartender Test) requires a clear value statement,
+    which should be in README.md.
+
+  Fix this by:
+    Create README.md with:
+    1. What this project does (one sentence)
+    2. Installation instructions
+    3. Basic usage example
+```
+
+**No project files:**
+```
+X Cannot audit: No project files detected
+  Path: /path/to/empty
+
+  Why this matters:
+    Gate 3 (10-Minute Test) requires working code to evaluate.
+
+  Fix this by:
+    Ensure directory contains source code and configuration.
+    Expected indicators: package.json, Cargo.toml, pyproject.toml,
+    go.mod, src/, lib/, or entry files (index.js, main.py)
+```
+
+For complete error handling patterns, see `guides/INPUT-VALIDATION.md`.
+
 ## The 11 Gates
 
 Complete gate definitions are maintained in `config/gates-full.md`. Each gate includes:
