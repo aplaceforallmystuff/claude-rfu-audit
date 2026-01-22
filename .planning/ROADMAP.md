@@ -12,7 +12,7 @@ This roadmap transforms the RFU Audit skill from a working-but-inconsistent fram
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Modular Architecture** - Separate concerns into focused files without changing behavior
+- [x] **Phase 1: Modular Architecture** - Separate concerns into focused files without changing behavior
 - [ ] **Phase 2: Gate Clarity** - Add rubrics, FAIL examples, and edge case handling for consistent scoring
 - [ ] **Phase 3: Input Validation** - Handle bad paths and missing files gracefully
 - [ ] **Phase 4: Quick Audit Mode** - 5-gate triage for rapid project filtering
@@ -35,8 +35,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Create directory structure and migrate gate definitions to config/gates-full.md
-- [ ] 01-02-PLAN.md — Update SKILL.md as orchestrator with file references
+- [x] 01-01-PLAN.md — Create directory structure and migrate gate definitions to config/gates-full.md
+- [x] 01-02-PLAN.md — Update SKILL.md as orchestrator with file references
 
 ### Phase 2: Gate Clarity
 **Goal**: Two auditors score the same project within 1 point of each other
@@ -158,7 +158,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Modular Architecture | 0/2 | Planned | - |
+| 1. Modular Architecture | 2/2 | Complete | 2026-01-22 |
 | 2. Gate Clarity | 0/4 | Not started | - |
 | 3. Input Validation | 0/2 | Not started | - |
 | 4. Quick Audit Mode | 0/2 | Not started | - |
