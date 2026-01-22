@@ -22,6 +22,23 @@ Quick mode tests the critical path through utility validation. These 5 gates cat
 
 **Gate selection rationale:** These gates form the critical path through utility validation. They test fundamental viability: Why it exists (Gate 1), whether users can access value (Gate 3), whether it's explainable (Gate 4), whether anyone would pay (Gate 5), and whether simpler alternatives exist (Gate 9). A project failing any of these gates has core viability issues that make further evaluation unnecessary.
 
+> **Quick Mode Mindset**
+>
+> Target: 1-2 minutes per gate. If you're researching deeply, you're overthinking.
+> Quick mode = gut check, not deep analysis. Save the rigor for full mode.
+
+**Use quick mode when:**
+- First-time audit of unfamiliar project
+- Portfolio triage (evaluating multiple projects)
+- Pre-audit sanity check before major investment
+- Time-constrained (need answer in <10 minutes)
+
+**Use full mode when:**
+- Quick mode passed (5/5 or 4/5)
+- Making go/no-go decision on significant investment
+- Need complete documentation of all gates
+- Project is already launched (comprehensive evaluation)
+
 ---
 
 ## Triage Decision Algorithm
