@@ -114,12 +114,12 @@ Plans:
   3. Effort estimates (quick/medium/involved) accompany each fix
   4. TEMPLATE-SPEC.md documents all template variables
   5. User knows what to do after reading a failed audit
-**Plans**: TBD
+**Plans:** 3 plans (2 waves)
 
 Plans:
-- [ ] 06-01: Design priority matrix and effort estimation logic
-- [ ] 06-02: Add fix integration and update audit template
-- [ ] 06-03: Create TEMPLATE-SPEC.md
+- [ ] 06-01-PLAN.md — Create PRIORITY-MATRIX.md guide with ranking algorithm and effort estimation
+- [ ] 06-02-PLAN.md — Update audit templates with Priority Matrix section and SKILL.md process
+- [ ] 06-03-PLAN.md — Create TEMPLATE-SPEC.md documenting all template variables
 
 ### Phase 7: Audit History (Future)
 **Goal**: Track project improvement over time
