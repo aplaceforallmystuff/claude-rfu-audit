@@ -93,6 +93,9 @@ Recent decisions affecting current work:
 | 05-02 | Extraction as step 2 (between file reading and mode selection) | Extracted context applies to both full and quick modes | Process steps renumbered 0-8 |
 | 05-02 | Field-to-gate mapping in callout | Document specific gates benefiting from each extracted field (Gates 1, 3, 4, 5, 10) | Makes auto-analyze value concrete vs vague "helpful" |
 | 05-02 | Graceful degradation documented | Extraction failures don't block audit, manual fallback available | Auto-analyze is convenience feature, not requirement |
+| 06-01 | HIGH impact gates: 1, 3, 4, 5, 7, 11 | Core viability (1, 5, 11) or first impression/adoption barrier (3, 4, 7) | Priority ranking puts these first |
+| 06-01 | Gate 4 defaults to quick effort | Text rewrite in README requires no code changes | Fast win in priority matrix |
+| 06-01 | Gates 2, 9, 11 default to involved effort | Require new unique value, removing features, or fundamental commitment reassessment | Sets expectations for complex fixes |
 | 06-03 | 98 total static variables documented | 85 gate + 13 metadata/mode-specific variables | Single reference for template development |
 | 06-03 | Dynamic sections separated from static variables | Priority Matrix and Next Steps generated per audit, not templated | Clarifies what's static vs computed |
 
@@ -106,9 +109,9 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-28T11:54:25Z
-Stopped at: Completed 06-03-PLAN.md (Template Variable Specification)
+Last session: 2026-01-28T11:55:30Z
+Stopped at: Completed 06-01-PLAN.md (Priority Matrix Guide)
 Resume file: None
 
 ---
-*Next step: Check status of 06-01 and 06-02 to complete Phase 6*
+*Next step: Execute 06-02-PLAN.md to complete Phase 6*
