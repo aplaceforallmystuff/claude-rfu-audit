@@ -17,23 +17,31 @@ Developers build what's interesting to *them*, not what's valuable to *users*. T
 ## Usage
 
 ```
-/rfu-audit [project-path] [--quick]
+/rfu-audit [project-path] [--quick] [--auto-analyze]
 /rfu-audit ~/Dev/my-project
 /rfu-audit ~/Dev/my-project --quick
+/rfu-audit ~/Dev/my-project --auto-analyze
+/rfu-audit ~/Dev/my-project --auto-analyze --quick
 ```
 
 If no path provided, audits the current working directory.
 
 ### Mode Selection
 
-| Flag | Mode | Gates | Config | Template |
-|------|------|-------|--------|----------|
-| (none) | Full | 11 gates | `config/gates-full.md` | `templates/audit-report.md` |
-| `--quick` | Quick | 5 gates | `config/gates-quick.md` | `templates/audit-report-quick.md` |
+| Flag | Mode | Gates | Config | Template | Pre-step |
+|------|------|-------|--------|----------|----------|
+| (none) | Full | 11 gates | `config/gates-full.md` | `templates/audit-report.md` | - |
+| `--quick` | Quick | 5 gates | `config/gates-quick.md` | `templates/audit-report-quick.md` | - |
+| `--auto-analyze` | Full + Extract | 11 gates | `config/gates-full.md` | `templates/audit-report.md` | Extract & verify |
+| `--auto-analyze --quick` | Quick + Extract | 5 gates | `config/gates-quick.md` | `templates/audit-report-quick.md` | Extract & verify |
 
 **Quick mode** runs a 5-gate subset (Gates 1, 3, 4, 5, 9) for rapid triage in 5-10 minutes. Use it to filter projects before committing to a full audit.
 
 **Full mode** runs all 11 gates for comprehensive evaluation (45-90 minutes). Use it after quick mode passes or for final go/no-go decisions.
+
+**Auto-analyze mode** extracts project information from README.md and package.json before scoring begins. Extracted data is presented as suggestions for human verification. Use it to reduce manual data entry when auditing unfamiliar projects.
+
+**Important:** Auto-analyze extracts suggestions, not scores. Human verification is required before gate scoring begins.
 
 ## Input Validation
 
@@ -139,6 +147,33 @@ X Cannot audit: No project files detected
 
 For complete error handling patterns, see `guides/INPUT-VALIDATION.md`.
 
+---
+
+## Auto-Analyze (Optional)
+
+When invoked with `--auto-analyze`, the skill extracts project context from files before scoring begins.
+
+**What gets extracted:**
+- Project name, one-line description
+- Value proposition, target users
+- Key features, installation time estimate, prerequisites
+
+**How it works:**
+1. Read README.md and package.json
+2. Extract fields using structured prompts
+3. Present suggestions with confidence levels (HIGH/MEDIUM/LOW/UNCERTAIN)
+4. Human verifies each suggestion (approve/edit/reject)
+5. Verified data available during gate scoring
+
+**Graceful degradation:**
+- If extraction fails for a field, prompt manual entry
+- Partial extraction still proceeds (only project_name required)
+- Auto-analyze failure does not block the audit
+
+For complete extraction heuristics, confidence rules, and verification workflow, see `guides/AUTO-ANALYZE.md`.
+
+---
+
 ## The 11 Gates
 
 Complete gate definitions are maintained in `config/gates-full.md`. Each gate includes:
@@ -180,18 +215,37 @@ When auditing a project:
 
 0. **Validate input**: Run 6-stage validation (see Input Validation section)
 1. **Read project files**: README, package.json, main source files
-2. **Select mode**: Based on `--quick` flag:
+2. **Extract context (if --auto-analyze)**:
+   - Read README.md and package.json
+   - Use structured extraction to identify: project name, description, value proposition, target users, key features, installation time estimate, prerequisites
+   - Present extracted suggestions with confidence levels
+   - Await human verification (approve/edit/reject each field)
+   - For complete extraction workflow, see `guides/AUTO-ANALYZE.md`
+3. **Select mode**: Based on `--quick` flag:
    - Quick mode: Use `config/gates-quick.md` (5 gates)
    - Full mode: Use `config/gates-full.md` (11 gates)
-3. **Walk through each gate sequentially** (per selected config)
-4. **Score each gate**: Pass (1) or Fail (0)
-5. **Provide evidence** for each score
-6. **Generate prioritized fix recommendations** (full mode) or triage recommendation (quick mode)
-7. **Output structured report** using corresponding template:
+4. **Walk through each gate sequentially** (per selected config)
+5. **Score each gate**: Pass (1) or Fail (0) — use extracted context if available
+6. **Provide evidence** for each score
+7. **Generate prioritized fix recommendations** (full mode) or triage recommendation (quick mode)
+8. **Output structured report** using corresponding template:
    - Quick mode: `templates/audit-report-quick.md`
    - Full mode: `templates/audit-report.md`
 
-For borderline cases, consult `guides/EDGE-CASES.md` (when available).
+> **Using Extracted Context**
+>
+> When --auto-analyze is used, verified extracted data is available during gate scoring:
+> - Gate 1 (5 Whys): Use `value_proposition` as starting point for why chain
+> - Gate 3 (10-Minute): Use `installation_time_estimate` and `prerequisites`
+> - Gate 4 (Bartender): Use `one_line_description` as candidate sentence
+> - Gate 5 (Wallet): Use `target_users` when identifying who would pay
+> - Gate 10 (Pareto): Use `key_features` as feature list to analyze
+>
+> Extracted data accelerates scoring but does not replace gate evaluation. Each gate still requires judgment.
+
+For borderline cases, consult `guides/EDGE-CASES.md`.
+For auto-analyze extraction details, see `guides/AUTO-ANALYZE.md`.
+For input validation patterns, see `guides/INPUT-VALIDATION.md`.
 
 ## Integration with Wisdom Skills
 
