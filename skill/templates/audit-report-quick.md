@@ -74,6 +74,42 @@
 
 ---
 
+## Priority Matrix
+
+{{#if has_failures}}
+### Top Priority Fixes
+
+{{#each top_priority_fixes}}
+{{index}}. **Gate {{gate_number}}: {{gate_name}}** — Effort: {{effort_level}}
+
+   **Issue:** {{issue_summary}}
+
+   **Why fix this first:** {{impact_rationale}}
+
+   **Fix:** {{fix_action}}
+
+   **Resources:** {{resources}}
+
+{{/each}}
+
+{{#if other_failed_gates}}
+### Other Failed Gates
+
+{{#each other_failed_gates}}
+- **Gate {{gate_number}}: {{gate_name}}** — Effort: {{effort_level}} — {{issue_summary}}
+{{/each}}
+{{/if}}
+
+{{else}}
+All quick-check gates passed!
+
+Proceed to full audit (`/rfu-audit {{project_path}}`) for complete evaluation.
+{{/if}}
+
+<!-- Priority Matrix is dynamically generated following guides/PRIORITY-MATRIX.md -->
+
+---
+
 ## Next Steps
 
 {{next_steps}}
