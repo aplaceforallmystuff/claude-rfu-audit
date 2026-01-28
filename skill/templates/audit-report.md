@@ -202,18 +202,63 @@ Why is that important?
 
 ---
 
-## Priority Fixes
+## Priority Matrix
 
-To reach RFU Certified status:
+{{#if has_failures}}
+### Top Priority Fixes
 
-### Critical (Must Fix)
-{{critical_fixes}}
+{{#each top_priority_fixes}}
+{{index}}. **Gate {{gate_number}}: {{gate_name}}** — Effort: {{effort_level}}
 
-### Important (Should Fix)
-{{important_fixes}}
+   **Issue:** {{issue_summary}}
 
-### Nice to Have
-{{nice_fixes}}
+   **Why fix this first:** {{impact_rationale}}
+
+   **Fix:** {{fix_action}}
+
+   **Resources:** {{resources}}
+
+   {{#if unlocks}}
+   Unlocks: Fixing this helps with {{unlocks}}
+   {{/if}}
+   {{#if blocked_by}}
+   Blocked by: Must fix {{blocked_by}} first
+   {{/if}}
+
+{{/each}}
+
+{{#if other_failed_gates}}
+### Other Failed Gates
+
+{{#each other_failed_gates}}
+- **Gate {{gate_number}}: {{gate_name}}** — Effort: {{effort_level}} — {{issue_summary}}
+{{/each}}
+{{/if}}
+
+{{#if borderline_gates}}
+### Recommended (Borderline)
+
+{{#each borderline_gates}}
+- **Gate {{gate_number}}: {{gate_name}}** — {{borderline_reason}}
+{{/each}}
+{{/if}}
+
+{{else}}
+All gates passed! Project is RFU Certified.
+
+{{#if borderline_gates}}
+### Recommended Optimizations
+
+While all gates passed, these areas could be strengthened:
+
+{{#each borderline_gates}}
+- **Gate {{gate_number}}: {{gate_name}}** — {{borderline_reason}}
+{{/each}}
+{{/if}}
+{{/if}}
+
+<!-- Priority Matrix is dynamically generated following guides/PRIORITY-MATRIX.md -->
+<!-- Uses impact-effort ranking, gate-specific effort defaults, and resource linking -->
 
 ---
 
