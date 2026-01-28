@@ -227,7 +227,12 @@ When auditing a project:
 4. **Walk through each gate sequentially** (per selected config)
 5. **Score each gate**: Pass (1) or Fail (0) — use extracted context if available
 6. **Provide evidence** for each score
-7. **Generate prioritized fix recommendations** (full mode) or triage recommendation (quick mode)
+7. **Generate priority matrix**:
+   - Rank failed gates using impact-effort matrix (see `guides/PRIORITY-MATRIX.md`)
+   - Assign effort estimates (quick/medium/involved) per gate
+   - Link resources inline with each fix
+   - Note gate dependencies (unlocks/blocked by)
+   - For all-pass audits, check for borderline gates as optimization opportunities
 8. **Output structured report** using corresponding template:
    - Quick mode: `templates/audit-report-quick.md`
    - Full mode: `templates/audit-report.md`
@@ -246,6 +251,7 @@ When auditing a project:
 For borderline cases, consult `guides/EDGE-CASES.md`.
 For auto-analyze extraction details, see `guides/AUTO-ANALYZE.md`.
 For input validation patterns, see `guides/INPUT-VALIDATION.md`.
+For priority matrix generation, see `guides/PRIORITY-MATRIX.md`.
 
 ## Integration with Wisdom Skills
 
