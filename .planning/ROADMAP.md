@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Input Validation** - Handle bad paths and missing files gracefully
 - [x] **Phase 4: Quick Audit Mode** - 5-gate triage for rapid project filtering
 - [x] **Phase 5: Auto-Analyze Mode** - Pre-populate gate context from project files
-- [ ] **Phase 6: Actionable Output** - Priority matrix and fix integration
+- [x] **Phase 6: Actionable Output** - Priority matrix and fix integration
 - [ ] **Phase 7: Audit History** - Track and compare audits over time (Future)
 
 ## Phase Details
@@ -117,9 +117,9 @@ Plans:
 **Plans:** 3 plans (2 waves)
 
 Plans:
-- [ ] 06-01-PLAN.md — Create PRIORITY-MATRIX.md guide with ranking algorithm and effort estimation
-- [ ] 06-02-PLAN.md — Update audit templates with Priority Matrix section and SKILL.md process
-- [ ] 06-03-PLAN.md — Create TEMPLATE-SPEC.md documenting all template variables
+- [x] 06-01-PLAN.md — Create PRIORITY-MATRIX.md guide with ranking algorithm and effort estimation
+- [x] 06-02-PLAN.md — Update audit templates with Priority Matrix section and SKILL.md process
+- [x] 06-03-PLAN.md — Create TEMPLATE-SPEC.md documenting all template variables
 
 ### Phase 7: Audit History (Future)
 **Goal**: Track project improvement over time
@@ -163,7 +163,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 3. Input Validation | 2/2 | Complete | 2026-01-22 |
 | 4. Quick Audit Mode | 2/2 | Complete | 2026-01-22 |
 | 5. Auto-Analyze Mode | 2/2 | Complete | 2026-01-28 |
-| 6. Actionable Output | 0/3 | Not started | - |
+| 6. Actionable Output | 3/3 | Complete | 2026-01-28 |
 | 7. Audit History | 0/1 | Not started | - |
 
 ---
