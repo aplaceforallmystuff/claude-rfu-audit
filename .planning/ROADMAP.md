@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Gate Clarity** - Add rubrics, FAIL examples, and edge case handling for consistent scoring
 - [x] **Phase 3: Input Validation** - Handle bad paths and missing files gracefully
 - [x] **Phase 4: Quick Audit Mode** - 5-gate triage for rapid project filtering
-- [ ] **Phase 5: Auto-Analyze Mode** - Pre-populate gate context from project files
+- [x] **Phase 5: Auto-Analyze Mode** - Pre-populate gate context from project files
 - [ ] **Phase 6: Actionable Output** - Priority matrix and fix integration
 - [ ] **Phase 7: Audit History** - Track and compare audits over time (Future)
 
@@ -101,8 +101,8 @@ Plans:
 **Plans:** 2 plans (1 wave - parallel execution)
 
 Plans:
-- [ ] 05-01-PLAN.md — Create AUTO-ANALYZE.md guide with extraction heuristics and verification workflow
-- [ ] 05-02-PLAN.md — Add auto-analyze mode to SKILL.md with --auto-analyze flag
+- [x] 05-01-PLAN.md — Create AUTO-ANALYZE.md guide with extraction heuristics and verification workflow
+- [x] 05-02-PLAN.md — Add auto-analyze mode to SKILL.md with --auto-analyze flag
 
 ### Phase 6: Actionable Output
 **Goal**: Failed audits tell you exactly what to fix and how
@@ -162,7 +162,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 2. Gate Clarity | 4/4 | Complete | 2026-01-22 |
 | 3. Input Validation | 2/2 | Complete | 2026-01-22 |
 | 4. Quick Audit Mode | 2/2 | Complete | 2026-01-22 |
-| 5. Auto-Analyze Mode | 0/2 | Planned | - |
+| 5. Auto-Analyze Mode | 2/2 | Complete | 2026-01-28 |
 | 6. Actionable Output | 0/3 | Not started | - |
 | 7. Audit History | 0/1 | Not started | - |
 
