@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Quick Audit Mode** - 5-gate triage for rapid project filtering
 - [x] **Phase 5: Auto-Analyze Mode** - Pre-populate gate context from project files
 - [x] **Phase 6: Actionable Output** - Priority matrix and fix integration
-- [ ] **Phase 7: Audit History** - Track and compare audits over time (Future)
+- [ ] **Phase 7: Audit History** - Track and compare audits over time
 
 ## Phase Details
 
@@ -121,7 +121,7 @@ Plans:
 - [x] 06-02-PLAN.md — Update audit templates with Priority Matrix section and SKILL.md process
 - [x] 06-03-PLAN.md — Create TEMPLATE-SPEC.md documenting all template variables
 
-### Phase 7: Audit History (Future)
+### Phase 7: Audit History
 **Goal**: Track project improvement over time
 **Depends on**: Phase 6 (stable output format before adding history comparison)
 **Requirements**: HIST-01, HIST-02
@@ -130,10 +130,11 @@ Plans:
   2. Re-auditing a project shows score delta from previous audit
   3. History is file-based (skill remains stateless)
   4. Comparison shows which gates improved/regressed
-**Plans**: TBD
+**Plans:** 2 plans (2 waves)
 
 Plans:
-- [ ] 07-01: Implement audit history storage and comparison
+- [ ] 07-01-PLAN.md — Create AUDIT-HISTORY.md guide and add history functionality to SKILL.md
+- [ ] 07-02-PLAN.md — Update templates with frontmatter and delta display, document in TEMPLATE-SPEC.md
 
 ## Build Order Rationale
 
@@ -164,7 +165,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. Quick Audit Mode | 2/2 | Complete | 2026-01-22 |
 | 5. Auto-Analyze Mode | 2/2 | Complete | 2026-01-28 |
 | 6. Actionable Output | 3/3 | Complete | 2026-01-28 |
-| 7. Audit History | 0/1 | Not started | - |
+| 7. Audit History | 0/2 | Not started | - |
 
 ---
 *Created: 2026-01-22*
