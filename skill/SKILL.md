@@ -17,11 +17,12 @@ Developers build what's interesting to *them*, not what's valuable to *users*. T
 ## Usage
 
 ```
-/rfu-audit [project-path] [--quick] [--auto-analyze]
+/rfu-audit [project-path] [--quick] [--auto-analyze] [--history]
 /rfu-audit ~/Dev/my-project
 /rfu-audit ~/Dev/my-project --quick
 /rfu-audit ~/Dev/my-project --auto-analyze
 /rfu-audit ~/Dev/my-project --auto-analyze --quick
+/rfu-audit ~/Dev/my-project --history
 ```
 
 If no path provided, audits the current working directory.
@@ -34,6 +35,7 @@ If no path provided, audits the current working directory.
 | `--quick` | Quick | 5 gates | `config/gates-quick.md` | `templates/audit-report-quick.md` | - |
 | `--auto-analyze` | Full + Extract | 11 gates | `config/gates-full.md` | `templates/audit-report.md` | Extract & verify |
 | `--auto-analyze --quick` | Quick + Extract | 5 gates | `config/gates-quick.md` | `templates/audit-report-quick.md` | Extract & verify |
+| `--history` | History View | N/A | N/A | `guides/AUDIT-HISTORY.md` | Show audit timeline |
 
 **Quick mode** runs a 5-gate subset (Gates 1, 3, 4, 5, 9) for rapid triage in 5-10 minutes. Use it to filter projects before committing to a full audit.
 
@@ -174,6 +176,31 @@ For complete extraction heuristics, confidence rules, and verification workflow,
 
 ---
 
+## History Tracking
+
+Audit results are automatically saved for comparison on re-audits.
+
+**Save location:** `.planning/audits/{project-name}/{mode}/rfu-audit-YYYYMMDD-HHMMSS.md`
+
+**What gets tracked:**
+- Project name, path, date
+- Audit mode (full or quick)
+- Score and gate results
+- Full report content
+
+**On re-audit:**
+- Previous audit detected automatically
+- Score delta shown in Executive Summary
+- Gate changes shown in Scorecard table
+- Deltas: ↑ improved, ↓ regressed, = unchanged
+
+**View history:**
+Use `--history` flag to see audit timeline instead of running new audit.
+
+For complete history tracking specification, see `guides/AUDIT-HISTORY.md`.
+
+---
+
 ## The 11 Gates
 
 Complete gate definitions are maintained in `config/gates-full.md`. Each gate includes:
@@ -214,28 +241,40 @@ Refer to `config/gates-full.md` for complete specifications when evaluating each
 When auditing a project:
 
 0. **Validate input**: Run 6-stage validation (see Input Validation section)
-1. **Read project files**: README, package.json, main source files
-2. **Extract context (if --auto-analyze)**:
+1. **Check for --history flag**: If present, show audit timeline and exit (see `guides/AUDIT-HISTORY.md`)
+2. **Read project files**: README, package.json, main source files
+3. **Detect previous audit** (automatic):
+   - Extract normalized project name
+   - Check `.planning/audits/{project-name}/{mode}/` for previous audits
+   - If found, load most recent for comparison
+4. **Extract context (if --auto-analyze)**:
    - Read README.md and package.json
    - Use structured extraction to identify: project name, description, value proposition, target users, key features, installation time estimate, prerequisites
    - Present extracted suggestions with confidence levels
    - Await human verification (approve/edit/reject each field)
    - For complete extraction workflow, see `guides/AUTO-ANALYZE.md`
-3. **Select mode**: Based on `--quick` flag:
+5. **Select mode**: Based on `--quick` flag:
    - Quick mode: Use `config/gates-quick.md` (5 gates)
    - Full mode: Use `config/gates-full.md` (11 gates)
-4. **Walk through each gate sequentially** (per selected config)
-5. **Score each gate**: Pass (1) or Fail (0) — use extracted context if available
-6. **Provide evidence** for each score
-7. **Generate priority matrix**:
+6. **Walk through each gate sequentially** (per selected config)
+7. **Score each gate**: Pass (1) or Fail (0) — use extracted context if available
+8. **Provide evidence** for each score
+9. **Generate priority matrix**:
    - Rank failed gates using impact-effort matrix (see `guides/PRIORITY-MATRIX.md`)
    - Assign effort estimates (quick/medium/involved) per gate
    - Link resources inline with each fix
    - Note gate dependencies (unlocks/blocked by)
    - For all-pass audits, check for borderline gates as optimization opportunities
-8. **Output structured report** using corresponding template:
-   - Quick mode: `templates/audit-report-quick.md`
-   - Full mode: `templates/audit-report.md`
+10. **Compute deltas** (if previous audit exists):
+    - Compare gate results
+    - Prepare inline delta indicators
+11. **Output structured report** using corresponding template:
+    - Quick mode: `templates/audit-report-quick.md`
+    - Full mode: `templates/audit-report.md`
+12. **Save audit**:
+    - Create `.planning/audits/{project-name}/{mode}/` if needed
+    - Write report with YAML frontmatter
+    - Confirm save location
 
 > **Using Extracted Context**
 >
@@ -252,6 +291,7 @@ For borderline cases, consult `guides/EDGE-CASES.md`.
 For auto-analyze extraction details, see `guides/AUTO-ANALYZE.md`.
 For input validation patterns, see `guides/INPUT-VALIDATION.md`.
 For priority matrix generation, see `guides/PRIORITY-MATRIX.md`.
+For history tracking details, see `guides/AUDIT-HISTORY.md`.
 
 ## Integration with Wisdom Skills
 
