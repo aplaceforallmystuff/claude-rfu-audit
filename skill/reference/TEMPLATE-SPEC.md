@@ -309,6 +309,63 @@ The Next Steps section is generated based on score and audit mode.
 
 ---
 
+## History Variables
+
+These variables support audit history tracking and delta display.
+
+### Frontmatter Variables
+
+Used in YAML frontmatter for machine-readable metadata:
+
+| Variable | Type | Description | Example |
+|----------|------|-------------|---------|
+| `gate1_result` | string | Gate 1 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate2_result` | string | Gate 2 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate3_result` | string | Gate 3 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate4_result` | string | Gate 4 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate5_result` | string | Gate 5 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate6_result` | string | Gate 6 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate7_result` | string | Gate 7 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate8_result` | string | Gate 8 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate9_result` | string | Gate 9 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate10_result` | string | Gate 10 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `gate11_result` | string | Gate 11 pass/fail status | "PASS" / "FAIL" / "N/A" |
+| `project_name_normalized` | string | Normalized project name for file path | "my-cli-tool" |
+
+**Note:** Quick mode only uses gate1_result, gate3_result, gate4_result, gate5_result, gate9_result.
+
+### Comparison Variables
+
+Used when previous audit exists (conditional rendering):
+
+| Variable | Type | Description | Example |
+|----------|------|-------------|---------|
+| `has_previous` | boolean | Whether previous audit exists | true / false |
+| `previous_score` | integer | Score from previous audit | 7 |
+| `score_delta` | string | Score change indicator | "↑" / "↓" / "=" |
+| `gate1_change` | string | Gate 1 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate2_change` | string | Gate 2 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate3_change` | string | Gate 3 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate4_change` | string | Gate 4 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate5_change` | string | Gate 5 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate6_change` | string | Gate 6 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate7_change` | string | Gate 7 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate8_change` | string | Gate 8 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate9_change` | string | Gate 9 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate10_change` | string | Gate 10 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+| `gate11_change` | string | Gate 11 change indicator | "↑" / "↓" / "=" / "NEW" / "REMOVED" |
+
+**Change indicator meanings:**
+- `↑` — Improved (was FAIL, now PASS)
+- `↓` — Regressed (was PASS, now FAIL)
+- `=` — Unchanged (same status)
+- `NEW` — Newly applicable (was N/A, now PASS or FAIL)
+- `REMOVED` — No longer applicable (was PASS or FAIL, now N/A)
+
+**Note:** Quick mode only uses gate1_change, gate3_change, gate4_change, gate5_change, gate9_change.
+
+---
+
 ## Variable Count Summary
 
 | Section | Variable Count |
@@ -327,7 +384,9 @@ The Next Steps section is generated based on score and audit mode.
 | Gate 9 | 6 |
 | Gate 10 | 5 |
 | Gate 11 | 4 |
-| **Total Static Variables** | **98** |
+| History (Frontmatter) | 12 |
+| History (Comparison) | 13 |
+| **Total Static Variables** | **123** |
 
 Plus 2 dynamic sections (Priority Matrix, Next Steps) generated per audit.
 
@@ -337,7 +396,10 @@ Plus 2 dynamic sections (Priority Matrix, Next Steps) generated per audit.
 
 ### Full Audit Template (`audit-report.md`)
 
-Uses all variables listed above (98 total).
+Uses all variables listed above (123 total).
+
+**History (if has_previous):** has_previous, previous_score, score_delta, gate1_change through gate11_change (13)
+**Frontmatter:** gate1_result through gate11_result, project_name_normalized (12)
 
 ### Quick Audit Template (`audit-report-quick.md`)
 
@@ -350,9 +412,11 @@ Uses subset of variables:
 **Gate 4:** gate4_status, bartender_sentence, gate4_verdict (3)
 **Gate 5:** gate5_status, wallet_self, wallet_person1, wallet_person2, wallet_person3, gate5_verdict (6)
 **Gate 9:** gate9_status, occam_simpler, gate9_verdict (3)
+**History (if has_previous):** has_previous, previous_score, score_delta, gate1_change, gate3_change, gate4_change, gate5_change, gate9_change (8)
+**Frontmatter:** gate1_result, gate3_result, gate4_result, gate5_result, gate9_result, project_name_normalized (6)
 **Dynamic:** next_steps (1)
 
-**Quick mode total:** 25 variables + 1 dynamic section
+**Quick mode total:** 39 variables + 1 dynamic section
 
 ---
 
@@ -362,8 +426,9 @@ Uses subset of variables:
 - **Quick mode gates:** See `config/gates-quick.md` for 5-gate critical path subset
 - **Edge cases:** See `guides/EDGE-CASES.md` for borderline resolution rules
 - **Auto-analyze:** See `guides/AUTO-ANALYZE.md` for extraction heuristics that pre-populate variables
+- **History tracking:** See `guides/AUDIT-HISTORY.md` for storage format and comparison algorithm
 
 ---
 
-*Specification version: 1.0*
+*Specification version: 1.1*
 *Last updated: 2026-01-28*
