@@ -1,10 +1,10 @@
 ---
 name: rfu-audit
-description: Run the 11-gate Really Fucking Useful gauntlet to validate project utility before investing significant effort
+description: Run the 11-gate Really Effing Useful gauntlet to validate project utility before investing significant effort
 user-invocable: true
 ---
 
-# RFU Audit: Really Fucking Useful
+# RFU Audit: Really Effing Useful
 
 Systematic framework to validate project utility BEFORE investing significant effort. Most open source projects fail not because of bad code, but because they solve problems nobody has.
 

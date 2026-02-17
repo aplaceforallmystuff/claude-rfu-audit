@@ -1,4 +1,9 @@
-# RFU Audit: Really Fucking Useful
+# RFU Audit: Really Effing Useful
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blue)](https://docs.anthropic.com/en/docs/claude-code)
+
+![RFU Audit Architecture](docs/images/architecture-diagram.png)
 
 **Stop building things nobody wants.**
 
@@ -222,9 +227,13 @@ RFU integrates proven mental models:
 
 The goal isn't to kill ideas — it's to validate them quickly so you can either fix gaps or move on to something better.
 
+## Contributing
+
+Issues and PRs welcome. If you have a gate idea that's grounded in a real mental model (not just vibes), open an issue.
+
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ## Author
 
