@@ -54,10 +54,16 @@ cd claude-rfu-audit
 bash install.sh
 ```
 
-Or manually copy:
+### Option 2: Skills CLI
 
 ```bash
-cp -r skill ~/.claude/skills/rfu-audit
+npx skills add aplaceforallmystuff/claude-rfu-audit
+```
+
+### Option 3: Manual copy
+
+```bash
+cp -r skills/rfu-audit ~/.claude/skills/rfu-audit
 ```
 
 ## Usage
@@ -234,6 +240,15 @@ Issues and PRs welcome. If you have a gate idea that's grounded in a real mental
 ## License
 
 [MIT](LICENSE)
+
+## Related Skills
+
+Part of the [aplaceforallmystuff](https://skills.sh/aplaceforallmystuff) skills collection:
+
+- **[think-first](https://github.com/aplaceforallmystuff/claude-think-first)** — Mental model application before significant decisions
+- **[creation-guard](https://github.com/aplaceforallmystuff/claude-creation-guard)** — Prevent duplicate artifacts before creating new ones
+- **[lessons-learned](https://github.com/aplaceforallmystuff/claude-lessons-learned)** — Structured retrospectives that implement fixes, not just recommend them
+- **[the-antislop](https://github.com/aplaceforallmystuff/the-antislop)** — Detect and fix AI-generated writing patterns
 
 ## Author
 

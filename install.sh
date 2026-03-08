@@ -33,7 +33,7 @@ mkdir -p "$HOME/.claude/skills"
 # Copy skill files
 echo "Installing $SKILL_NAME..."
 rm -rf "$INSTALL_DIR"
-cp -r "$SCRIPT_DIR/skill" "$INSTALL_DIR"
+cp -r "$SCRIPT_DIR/skills/rfu-audit" "$INSTALL_DIR"
 
 # Verify installation
 if [ -f "$INSTALL_DIR/SKILL.md" ]; then
